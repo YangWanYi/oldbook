@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="user" extends="struts-default,json-default" namespace="/">
+		<action name="login" class="com.oldbook.action.UserAction" method="login">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="logout" class="com.oldbook.action.UserAction" method="logout">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="saveOrUpdate"  class="com.oldbook.action.UserAction" method="saveOrUpdate">
+			<result name="success" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="updatePwd" class="com.oldbook.action.UserAction" method="updatePwd">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="deleteUser"
+			class="com.oldbook.action.UserAction" method="deleteUser">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toUpdateUserPage"
+			class="com.oldbook.action.UserAction" method="toUpdateUserPage">
+			<result name="success">ui/admin/user/user/editUser.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="listUser" class="com.oldbook.action.UserAction" method="listUser">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="tradeOrder" extends="struts-default,json-default" namespace="/">
+		<action name="listTradeOrder" class="com.oldbook.action.TradeOrderAction">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="saveOrUpdate"  class="com.oldbook.action.TradeOrderAction" method="saveOrUpdate">
+			<result name="success" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="deleteTradeOrder"
+			class="com.oldbook.action.TradeOrderAction" method="deleteTradeOrder">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toUpdateTradeOrderPage"
+			class="com.oldbook.action.TradeOrderAction" method="toUpdateTradeOrderPage">
+			<result name="success">ui/merchant/tradeOrder/editTradeOrder.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="shop" extends="struts-default,json-default" namespace="/">
+		<action name="listShop" class="com.oldbook.action.ShopAction">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="saveOrUpdate"  class="com.oldbook.action.ShopAction" method="saveOrUpdate">
+			<result name="success" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="deleteShop"
+			class="com.oldbook.action.ShopAction" method="deleteShop">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toUpdateShopPage"
+			class="com.oldbook.action.ShopAction" method="toUpdateShopPage">
+			<result name="success">ui/merchant/shop/editShop.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="bookItem" extends="struts-default,json-default" namespace="/">
+		<action name="listBookItem" class="com.oldbook.action.BookItemAction">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="saveOrUpdate"  class="com.oldbook.action.BookItemAction" method="saveOrUpdate">
+			<result name="success" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="deleteBookItem"
+			class="com.oldbook.action.BookItemAction" method="deleteBookItem">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toUpdateBookItemPage"
+			class="com.oldbook.action.BookItemAction" method="toUpdateBookItemPage">
+			<result name="success">ui/merchant/bookItem/editBookItem.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="bookCart" extends="struts-default,json-default" namespace="/">
+		<action name="listBookCart" class="com.oldbook.action.BookCartAction">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="saveOrUpdate"  class="com.oldbook.action.BookCartAction" method="saveOrUpdate">
+			<result name="success" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="deleteBookCart"
+			class="com.oldbook.action.BookCartAction" method="deleteBookCart">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toUpdateBookCartPage"
+			class="com.oldbook.action.BookCartAction" method="toUpdateBookCartPage">
+			<result name="success">ui/customer/bookCart/editBookCart.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+</struts>
