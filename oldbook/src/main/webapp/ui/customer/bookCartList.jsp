@@ -30,35 +30,28 @@
 				float: left;
 			}
 			.searchItem{
-				float: right;
-				padding-right: 20px;
-				height: 35px;
-   				line-height: 35px;
-			    margin-top: 5px;
+				float: left;
+				height: 40px;
+   				line-height: 40px;
+   				margin-bottom: 20px;
 			}
 			.searchItem span,input{
 				display: inline-block;
 				float: left;
 				padding: 5px 10px;
 			}
-			#searchCart{
+			#searchBookCart{
 			    margin-top: 4px;
    	 			margin-left: 10px;
 			}
 		</style>
 	</head>
 	<body>
-	
-		<div id="toolbar">
-			<div id="deleteCart" class="btn btn-danger">删除</div>
-			<div id="submitOrder" class="btn btn-primary">提交订单</div>
-			
-		</div>
 		<div class="searchItem">
-			<span>水果</span>
-		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="fruitName" value="" placeholder="请输入水果">
-			<div id="searchCart" class="btn btn-info">立即搜索</div>
-			<div id="clearSearch" class="btn btn-secondary">清空</div>
+			<span>书籍名称</span>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="bookName" value="" placeholder="请输入书籍名称">
+			<div id="searchBookCart" class="btn btn-info">立即搜索</div>
+			<div id="clearSearch" class="btn btn-secondary" style="margin-top: 4px;">清空</div>
 		</div>
 		
 		<!-- 模态框（Modal） -->
@@ -100,18 +93,18 @@
 		var $table = $('#table');
 		var userId = "${sessionScope.user.id}";
 		$(function() {
-			initTable('/listCart.action?userId='+userId);
+			initTable('/listBookCart.action?userId='+userId);
 		});
 		
-		$('#searchCart').click(function(){ // 立即搜索
-			var fruitName = $("#fruitName").val();
-			initTable('/listCart.action?userId='+userId+'&fruitName='+fruitName);
+		$('#searchBookCart').click(function(){ // 立即搜索
+			var bookName = $("#bookName").val();
+			initTable('/listBookCart.action?userId='+userId+'&bookName='+bookName);
 		});
 		$('#clearSearch').click(function(){
-			$("#title").val('');
-			initTable('/listCart.action');
+			$("#bookName").val('');
+			initTable('/listBookCart.action?userId='+userId);
 		});
-		$('#deleteCart').click(function(){
+		$('#deleteBookCart').click(function(){
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -130,46 +123,14 @@
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/deleteCart.action',
+					url: '/deleteBookCart.action',
 					data: {'ids': ids},
 					async: false,
 					success: function(s){
-						initTable('/listCart.action?userId='+userId); // 重新加载数据
+						initTable('/listBookCart.action?userId='+userId); // 重新加载数据
 					},
 					error: function(e){
 						alert("删除失败！");
-					}
-				});
-		    }
-		});
-		$('#submitOrder').click(function(){
-			var row = $table.bootstrapTable('getSelections');
-			if(row.length == 0){
-				alert("请选择数据！");
-				return false;
-			}
-			var ids = "";
-			for(var i=0;i<row.length;i++){
-				if(row[i].state==1){
-					alert('不可重复提交订单！');
-					ids = '';
-					break;
-				}
-				ids += row[i].id+',';
-			}
-			if(ids!=''&&confirm('确定提交订单吗？')){
-				$.ajax({
-					type: 'post',
-					dataType: 'json',
-					url: '/saveOrUpdateOrder.action',
-					data: {'ids': ids},
-					async: false,
-					success: function(s){
-						alert("订单提交成功，请前往订单中心支付！");
-						initTable('/listCart.action?userId='+userId); // 重新加载数据
-					},
-					error: function(e){
-						alert("订单提交失败！");
 					}
 				});
 		    }
@@ -189,35 +150,84 @@
 			          valign: 'middle',
 			          visible: false,
 			        }, {
-			          title: '水果',
-			          field: 'fruitName',
+			          title: '店铺名称',
+			          field: 'shopName',
 			          align: 'center',
 			          width: 100
 			        },{
-			          title: '价格',
-			          field: 'salePrice',
-			          halign: 'center',
+			          title: '书籍名称',
+			          field: 'bookName',
+			          align: 'center',
 			          width: 300,
 			        },{
-			          title: '数量',
-			          field: 'purchaseNum',
-			          halign: 'center',
+			          title: '单价',
+			          field: 'unitPrice',
+			          align: 'center',
+			          width: 300,
+			        },{
+			          title: '采购数量（本）',
+			          field: 'amount',
+			          align: 'center',
 			          width: 300,
 			        },{
 			          title: '是否提交订单',
-			          field: 'state',
-			          halign: 'center',
+			          field: 'submitOrder',
+			          align: 'center',
+			          width: 300,
+			        },{
+			          title: '操作',
+			          field: 'rec',
+			          align: 'center',
 			          width: 300,
 			          formatter: function (value, row, index) {
-		                if (0==value) {
-		                    return '否'; 
-		                }else if (1==value) {
-		                    return '是';
-		                }
+			        	  var text = '';
+			        	  if(row.submitOrder == '未提交'){
+		                		text = '<div onclick="deleteBookCart(\''+row.id+'\');" style="margin-right: 10px;" class="btn btn-danger">删除</div>'
+		    					+'<div onclick="submitOrder(\''+row.id+'\');" class="btn btn-primary">提交订单</div>';
+			        	  }
+		                return text;
 		              }
 			        }
 		        ]]
 		    });
 		  }
+		
+		function submitOrder(id){
+			if(confirm('确定提交订单吗？')){
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					url: '/submitOrder.action',
+					data: {'id': id},
+					async: false,
+					success: function(s){
+						alert("订单提交成功，请前往我的订单支付！");
+						initTable('/listBookCart.action?userId='+userId); // 重新加载数据
+					},
+					error: function(e){
+						alert("订单提交失败！");
+					}
+				});
+		    }
+		}
+		
+		function deleteBookCart(id){
+			if(confirm('确定删除吗？')){
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					url: '/deleteBookCart.action',
+					data: {'id': id},
+					async: false,
+					success: function(s){
+						alert("删除成功！");
+						initTable('/listBookCart.action?userId='+userId); // 重新加载数据
+					},
+					error: function(e){
+						alert("删除失败！");
+					}
+				});
+		    }
+		}
 	</script>
 </html>

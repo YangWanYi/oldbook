@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.oldbook.domain.ShopDo;
 import com.oldbook.domain.UserDo;
+import com.oldbook.service.ShopService;
 import com.oldbook.service.UserService;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -16,6 +18,8 @@ public class UserAction implements Action, ModelDriven<UserDo> {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ShopService shopService;
 
 	private UserDo userData;
 	private List<UserDo> rows;
@@ -44,7 +48,7 @@ public class UserAction implements Action, ModelDriven<UserDo> {
 		}
 	}
 
-	public String saveOrUpdate() {
+	public String saveOrUpdateUser() {
 		try {
 			if (this.userData.getId() != null) { // 存在主键 走编辑
 				this.userData.setUpdateTime(new Date());
@@ -53,6 +57,7 @@ public class UserAction implements Action, ModelDriven<UserDo> {
 				this.userData.setCreateTime(new Date());
 				this.userService.insertUser(this.userData);
 			}
+			ActionContext.getContext().getSession().put("user", this.userData);
 			return NONE;
 		} catch (Exception e) {
 			return ERROR;
@@ -80,17 +85,28 @@ public class UserAction implements Action, ModelDriven<UserDo> {
 	}
 
 	public String login() {
-		if (StringUtils.isNoneEmpty(this.userData.getAccount())
-				&& StringUtils.isNoneEmpty(this.userData.getPassword())) {
-			UserDo user = this.userService.loginUser(this.userData.getAccount(), this.userData.getPassword(),
-					this.userData.getRoleType());
-			if (user != null) {
-				ActionContext.getContext().getSession().put("user", user);
-				return NONE;
+		try {
+			if (StringUtils.isNoneEmpty(this.userData.getAccount())
+					&& StringUtils.isNoneEmpty(this.userData.getPassword()) && StringUtils.isNoneEmpty(this.userData.getRoleTypeX())) {
+				UserDo user = this.userService.loginUser(this.userData.getAccount(), this.userData.getPassword(),
+						this.userData.getRoleTypeX());
+				if (user != null) {
+					ActionContext.getContext().getSession().put("user", user);
+					ShopDo shop = new ShopDo();
+					shop.setUserId(user.getId());
+					List<ShopDo> shopList = shopService.listShop(shop);
+					if(shopList.size()>0) {
+						ActionContext.getContext().getSession().put("shop", shopList.get(0));
+					}
+					return NONE;
+				} else {
+					return ERROR;
+				}
 			} else {
 				return ERROR;
 			}
-		} else {
+		} catch (Exception e) {
+			e.printStackTrace();
 			return ERROR;
 		}
 	}

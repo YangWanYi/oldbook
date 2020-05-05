@@ -10,28 +10,31 @@
 			body{
 				width: 100%;
 				height: 100%;
+				overflow: hidden;
 			}
 			form{
-				width: 30%;
+				width: 100%;
 				text-align: center;
-				margin: 5% auto;
-				border: 1px solid #eee;
-				border-radius: 5px;
-				padding: 10px;
+			}
+			#registNow{
+				margin-top: 15px;
 			}
 		</style>
 	</head>
 	<body>
 		<form id="myForm">
-			<!-- 只有客户可以随便注册 管理员需要内部添加账户 因此默认注册角色类型为客户 1：客户 2：管理员 -->
-			<input type="hidden" name="roleType" value="1">
-			<div class="form-group">
-				<label for="exampleInputAccount">用户名</label>
-				<input type="text" class="form-control" id="exampleInputAccount" name="account" aria-describedby="emailHelp">
+			<!-- 默认注册为客户 -->
+			<input type="hidden" name="roleType" value="2">
+			<input type="hidden" name="roleTypeX" value="客户">
+			<div class="form-group row">
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" autocomplete="off" id="account" name="account" value="" placeholder="请输入用户名">
+			    </div>
 			</div>
-			<div class="form-group">
-				<label for="exampleInputPassword">密码</label>
-				<input type="password" class="form-control" id="exampleInputPassword" name="password">
+			<div class="form-group row">
+			    <div class="col-sm-6">
+			      <input type="password" class="form-control" autocomplete="off" id="password" name="password" value="" placeholder="请输入密码">
+			    </div>
 			</div>
 			<input type="button" id="registNow" class="btn btn-primary" value="免费注册"/>
 		</form>
@@ -45,15 +48,11 @@
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/regist.action',
+					url: '/saveOrUpdateUser.action',
 					data: $("#myForm").serialize(),
 					async: false,
 					success: function(s){
-						if(s.userId){
-							parent.location.reload(); //刷新父级页面
-						}else{
-							alert("注册失败！");
-						}
+						parent.location.reload(); //刷新父级页面
 					},
 					error: function(e){
 						alert("注册失败！");

@@ -2,6 +2,7 @@ package com.oldbook.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
@@ -39,12 +40,12 @@ public class TradeOrderDaoImpl extends HibernateDaoSupport  implements TradeOrde
 	}
 
 	@Override
-	public List<TradeOrderDo> listTradeOrder(TradeOrderDo TradeOrder) {
+	public List<TradeOrderDo> listTradeOrder(TradeOrderDo tradeOrder) {
 		StringBuffer hql=new StringBuffer();
 		hql.append(" from TradeOrderDo where 1=1");
-//		if(StringUtils.isNoneEmpty(TradeOrder.getTradeOrderName())) {
-//			hql.append(" and TradeOrderNAME like '%"+TradeOrder.getTradeOrderName()+"%'  ");
-//		}
+		if(StringUtils.isNoneEmpty(tradeOrder.getBookName())) {
+			hql.append(" and bookName like '%"+tradeOrder.getBookName()+"%'  ");
+		}
 		@SuppressWarnings("unchecked")
 		List<TradeOrderDo> list= (List<TradeOrderDo>) super.getHibernateTemplate().find(hql.toString());
 		return list;

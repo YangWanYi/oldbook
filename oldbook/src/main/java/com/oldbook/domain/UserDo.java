@@ -40,12 +40,6 @@ public class UserDo implements Serializable {
 	private Integer gender;
 
 	/**
-	 * 角色类型ID
-	 */
-	@Column(name = "ROLETYPE")
-	private Integer roleType;
-	
-	/**
 	 * 角色类型文本值
 	 */
 	@Column(name = "roleTypeX")
@@ -173,16 +167,8 @@ public class UserDo implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public Integer getRoleType() {
-		return roleType;
-	}
-
 	public String getRoleTypeX() {
 		return roleTypeX;
-	}
-
-	public void setRoleType(Integer roleType) {
-		this.roleType = roleType;
 	}
 
 	public void setRoleTypeX(String roleTypeX) {

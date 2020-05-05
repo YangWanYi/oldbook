@@ -21,7 +21,7 @@
 			#winIframe{
 				height: 100%;
 				width: 100%;
-				border: none;
+				bTradeOrder: none;
 			}
 			.modal{
 				margin: 5% auto;
@@ -30,25 +30,29 @@
 				float: left;
 			}
 			.searchItem{
-				float: right;
-				padding-right: 20px;
-				height: 35px;
-   				line-height: 35px;
-			    margin-top: 5px;
+				float: left;
+				height: 40px;
+   				line-height: 40px;
+   				margin-bottom: 20px;
 			}
 			.searchItem span,input{
 				display: inline-block;
 				float: left;
 				padding: 5px 10px;
 			}
-			#searchOrder{
+			#searchTradeOrder{
 			    margin-top: 4px;
    	 			margin-left: 10px;
 			}
 		</style>
 	</head>
 	<body>
-        
+        <div class="searchItem">
+			<span>书籍名称</span>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="bookName" value="" placeholder="请输入书籍名称">
+			<div id="searchTradeOrder" class="btn btn-info">立即搜索</div>
+			<div id="clearSearch" class="btn btn-secondary" style="margin-top: 4px;">清空</div>
+		</div>
 		<!-- 模态框（Modal） -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		    <div class="modal-dialog">
@@ -87,9 +91,19 @@
 		var $table = $('#table');
 		var userId = "${sessionScope.user.id}";
 		$(function() {
-			initTable('/listOrder.action?userId='+userId);
+			initTable('/listTradeOrder.action?userId='+userId);
 		});
-
+		
+		$('#searchTradeOrder').click(function(){ // 立即搜索
+			var bookName = $("#bookName").val();
+			initTable('/listTradeOrder.action?userId='+userId+'&bookName='+bookName);
+		});
+		
+		$('#clearSearch').click(function(){
+			$("#bookName").val('');
+			initTable('/listTradeOrder.action?userId='+userId);
+		});
+		
 		function initTable(url) {
 			$table.bootstrapTable('destroy').bootstrapTable({
 				height:$(window).height(),
@@ -104,21 +118,19 @@
 			          align: 'center',
 			          valign: 'middle',
 			        }, {
+			          title: '书名',
+			          field: 'bookName',
+			          align: 'center',
+			          valign: 'middle',
+			          width: 100,
+			        },{
 			          title: '订单状态',
 			          field: 'orderState',
 			          align: 'center',
 			          valign: 'middle',
 			          width: 100,
-			          formatter: function (value, row, index) {
-			        	  if("1"==value){
-			        		  value = "已支付";
-			        	  }else if("0"==value){
-			        		  value = "未支付"
-			        	  }
-	                    return value;
-		              }
 			        },{
-			          title: '下单总额（元）',
+			          title: '总额（元）',
 			          field: 'totalPrice',
 			          align: 'center',
 			          valign: 'middle',
@@ -170,10 +182,10 @@
 			          width: 500,
 			          formatter: function (value, row, index) {
 			        	var sum = (row.postage==null?0:row.postage)+(row.totalPrice==null?0:row.totalPrice);
-	                    var text = '<a onclick="showFruits(\''+row.id+'\');" style="margin-right: 10px;color:#fff;" class="btn btn-primary"  data-toggle="modal" data-target="#myModal">查看相关水果<a/>'
-	                    		if(row.orderState!='1'){
+	                    var text = '';
+	                    		if(row.orderState!='已支付'){
 	                    			text += '<a onclick="payNow(\''+row.id+'\',\''+sum+'\');" style="color:#fff;margin-right: 10px;" class="btn btn-success">立即支付<a/>'
-		                    		text += '<a onclick="deleteOrder(\''+row.id+'\');" style="color:#fff;" class="btn btn-danger">删除订单<a/>'
+		                    		text += '<a onclick="deleteTradeOrder(\''+row.id+'\');" style="color:#fff;" class="btn btn-danger">删除订单<a/>'
 	                    		}
 	                    return text;
 		              }
@@ -181,32 +193,18 @@
 		        ]]
 		    });
 		  }
-		function showFruits(id){
-			$("#winIframe").attr("src","/toorderFruitListPage.action?id="+id);
-			$('#myModal').on('shown.bs.modal', function () {
-				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
-				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('订单相关水果');// 修改modal的标题
-			});
-		}
 		
-		function payNow(orderId,sum){
-			var balance = "${sessionScope.user.balance}";
-			var myMoney = balance==null?0:parseInt(balance);
-			if(myMoney<sum){
-				alert('余额不足，请先充值！');
-				return false;
-			}
+		function payNow(tradeOrderId,sum){
 			if(confirm('总计'+sum+'元,确定支付吗？')){
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/payOrder.action',
-					data: {'id': orderId},
+					url: '/payTradeOrder.action',
+					data: {'id': tradeOrderId},
 					async: false,
 					success: function(s){
-						alert("支付成功，请耐心等待水果到家！");
-						initTable('/listOrder.action?userId='+userId); // 重新加载数据
+						alert("支付成功！");
+						initTable('/listTradeOrder.action?userId='+userId); // 重新加载数据
 					},
 					error: function(e){
 						alert("支付失败！");
@@ -214,17 +212,17 @@
 				});
 		    }
 		}
-		function deleteOrder(orderId){
+		function deleteTradeOrder(TradeOrderId){
 			if(confirm('确定删除吗？')){
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/deleteOrder.action',
-					data: {'id': orderId},
+					url: '/deleteTradeOrder.action',
+					data: {'id': TradeOrderId},
 					async: false,
 					success: function(s){
 						alert("删除成功！");
-						initTable('/listOrder.action?userId='+userId); // 重新加载数据
+						initTable('/listTradeOrder.action?userId='+userId); // 重新加载数据
 					},
 					error: function(e){
 						alert("删除失败！");

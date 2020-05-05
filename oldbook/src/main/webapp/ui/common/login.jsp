@@ -10,28 +10,45 @@
 			body{
 				width: 100%;
 				height: 100%;
+				overflow: hidden;
 			}
 			form{
-				width: 30%;
+				width: 100%;
 				text-align: center;
-				margin: 5% auto;
-				border: 1px solid #eee;
-				border-radius: 5px;
-				padding: 10px;
+			}
+			#loginNow{
+				margin-top: 5px;
+			}
+			.form-group{
+				margin-top: 10px;
 			}
 		</style>
 	</head>
 	<body>
 		<form id="myForm">
-			<div class="form-group">
-				<label for="exampleInputAccount">用户名</label>
-				<input type="text" class="form-control" id="exampleInputAccount" name="account">
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" name="roleTypeX" id="roleTypeX" value="管理员" checked="checked">
+			  <label class="form-check-label" for="inlineRadio1">管理员</label>
 			</div>
-			<div class="form-group">
-				<label for="exampleInputPassword">密码</label>
-				<input type="password" class="form-control" id="exampleInputPassword" name="password">
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" name="roleTypeX" id="roleTypeX" value="商家">
+			  <label class="form-check-label" for="inlineRadio2">商家</label>
 			</div>
-			<input type="button" id="loginNow" class="btn btn-primary" value="登录"/>
+			<div class="form-check form-check-inline">
+			  <input class="form-check-input" type="radio" name="roleTypeX" id="roleTypeX" value="客户">
+			  <label class="form-check-label" for="inlineRadio3">客户</label>
+			</div>
+			<div class="form-group row">
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" id="account" name="account" value="" placeholder="请输入用户名">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <div class="col-sm-6">
+			      <input type="password" class="form-control" id="password" name="password" value="" placeholder="请输入密码">
+			    </div>
+			</div>
+			<input type="button" id="loginNow" class="btn btn-primary" value="确定登录"/>
 		</form>
 	</body>
 	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -40,6 +57,21 @@
 	<script type="text/javascript">
 		$(function(){
 			$("#loginNow").click(function(){
+				var roleTypeX = $('input[name="roleTypeX"]:checked').val(); 
+				var account = $("#account").val();
+				var password = $("#password").val();
+				if(roleTypeX==null||roleTypeX==''){
+					alert("请选择角色！");
+					return false;
+				}
+				if(account==null||account==''){
+					alert("请输入账户名！");
+					return false;
+				}
+				if(password==null||password==''){
+					alert("请输入密码！");
+					return false;
+				}
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
@@ -47,14 +79,17 @@
 					data: $("#myForm").serialize(),
 					async: false,
 					success: function(s){
-						if(s.userId){
-							parent.location.reload(); //刷新父级页面
-						}else{
-							alert("登录失败！");
+						if(roleTypeX.indexOf("管理员")!=-1){ // 跳转至管理员界面
+							parent.location.href = '../admin/index.jsp';
+						}else if(roleTypeX.indexOf("商家")!=-1){ // 跳转至商家界面
+							parent.location.href = '../merchant/index.jsp';
+						}else if(roleTypeX.indexOf("客户")!=-1){ // 跳转至客户界面
+// 							parent.location.href = '../customer/index.jsp';
+							parent.location.reload();
 						}
 					},
 					error: function(e){
-						alert("登录失败！");
+						alert("登录失败，可能是角色选错，或用户名、密码错误！");
 					}
 				});
 			});

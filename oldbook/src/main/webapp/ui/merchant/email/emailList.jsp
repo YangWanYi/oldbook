@@ -10,7 +10,7 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		<link href="https://cdn.bootcss.com/bootstrap-table/1.16.0/bootstrap-table.css" rel="stylesheet">
-		<title>店铺管理</title>
+		<title>水果维护</title>
 		<style type="text/css">
 			*{
 				padding: 0 0;
@@ -22,7 +22,7 @@
 				overflow-x: hidden; 
 				padding: 0px 10px;
 			}
-			#winIframe{
+			#winIframe,#uploadIframe{
 				height: 100%;
 				width: 100%;
 				border: none;
@@ -45,7 +45,7 @@
 				float: left;
 				padding: 5px 10px;
 			}
-			#searchShop{
+			#searchFruit{
 			    margin-top: 4px;
    	 			margin-left: 10px;
 			}
@@ -54,15 +54,16 @@
 	<body>
 	
 		<div id="toolbar">
-			<div id="addShop" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增用户</div>
-			<div id="editShop" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑用户</div>
-			<div id="deleteShop" class="btn btn-danger">删除用户</div>
+			<div id="addFruit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增水果</div>
+			<div id="editFruit" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑水果</div>
+			<div id="deleteFruit" class="btn btn-danger">删除水果</div>
+			<div id="uploadPic" class="btn btn-warning" data-toggle="modal" data-target="#uploadModal">上传图片</div>
 			
 		</div>
 		<div class="searchItem">
-			<span>姓名</span>
-		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="ShopName" value="" placeholder="请输入姓名">
-			<div id="searchShop" class="btn btn-info">立即搜索</div>
+			<span>水果名称</span>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="fruitName" value="" placeholder="请输入水果名称">
+			<div id="searchFruit" class="btn btn-info">立即搜索</div>
 			<div id="clearSearch" class="btn btn-secondary">清空</div>
 		</div>
 		
@@ -84,6 +85,25 @@
 		        </div>
 		    </div>
 		</div>
+		
+		<!-- 模态框（Modal）上传图片  -->
+		<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h4 class="modal-title" id="myModalLabel"></h4>
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		            </div>
+		            <div class="modal-body">
+						<iframe id="uploadIframe" width="100%" height="100%"></iframe>
+					</div>
+		            <div class="modal-footer">
+		                <div class="btn btn-default" data-dismiss="modal">关闭</div>
+		                <div class="btn uploadNow btn-primary">确定</div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
         
 		<table
 		  id="table"
@@ -97,6 +117,7 @@
 		
 	</body>
 	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	<script src="https://cdn.bootcss.com/bootstrap-table/1.16.0/bootstrap-table.js"></script>
@@ -104,26 +125,26 @@
 	<script type="text/javascript">
 		var $table = $('#table');
 		$(function() {
-			initTable('/listShop.action');
+			initTable('/listFruit.action');
 		});
 		
-		$('#searchShop').click(function(){ // 立即搜索
-			var ShopName = $("#ShopName").val();
-			initTable('/listShop.action?ShopName='+ShopName);
+		$('#searchFruit').click(function(){ // 立即搜索
+			var fruitName = $("#fruitName").val(); 
+			initTable('/listFruit.action?fruitName='+fruitName);
 		});
 		$('#clearSearch').click(function(){
-			$("#ShopName").val('');
-			initTable('/listShop.action');
+			$("#fruitName").val('');
+			initTable('/listFruit.action');
 		});
-		$('#addShop').click(function(){
-			$("#winIframe").attr("src","addShop.jsp");
+		$('#addFruit').click(function(){
+			$("#winIframe").attr("src","/toAddFruitPage.action");
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('新增用户');// 修改modal的标题
+				$(this).find('.modal-title').text('新增水果');// 修改modal的标题
 			});
 		});
-		$('#deleteShop').click(function(){
+		$('#deleteFruit').click(function(){
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -137,11 +158,11 @@
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/deleteShop.action',
+					url: '/deleteFruit.action',
 					data: {'ids': ids},
 					async: false,
 					success: function(s){
-						initTable('/listShop.action'); // 重新加载数据
+						initTable('/listFruit.action'); // 重新加载数据
 					},
 					error: function(e){
 						alert("删除失败！");
@@ -149,7 +170,7 @@
 				});
 		    }
 		});
-		$('#editShop').click(function(){
+		$('#uploadPic').click(function(){ // 上传图片
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -159,11 +180,29 @@
 				alert("只能选择一条数据！");
 				return false;
 			}
-			$("#winIframe").attr("src","/toUpdateShopPage.action?id="+row[0].id);
+			$("#uploadIframe").attr("src","/toUploadPage.action?id="+row[0].id);
+			$('#uploadModal').on('shown.bs.modal', function () {
+				$(this).find('.modal-content').css('height','500px');// 修改modal的高度
+				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
+				$(this).find('.modal-title').text('上传图片');// 修改modal的标题
+			});
+		});
+		
+		$('#editFruit').click(function(){
+			var row = $table.bootstrapTable('getSelections');
+			if(row.length == 0){
+				alert("请选择数据！");
+				return false;
+			}
+			if(row.length > 1){
+				alert("只能选择一条数据！");
+				return false;
+			}
+			$("#winIframe").attr("src","/toUpdateFruitPage.action?id="+row[0].id);
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('编辑用户');// 修改modal的标题
+				$(this).find('.modal-title').text('编辑水果');// 修改modal的标题
 			});
 		});
 		
@@ -171,7 +210,7 @@
 			$.ajax({
 				type: 'post',
 				dataType: 'json',
-				url: '/saveOrUpdateShop.action',
+				url: '/saveOrUpdateFruit.action',
 				data: $("#winIframe").contents().find("#myForm").serialize(),
 				async: false,
 				success: function(s){
@@ -183,9 +222,14 @@
 			});
 		});
 		
-		$("#myModal").on("hidden.bs.modal", function() {
+		$(".uploadNow").click(function(){
+			$("#uploadIframe").contents().find("#myUploadForm").submit();
+			$('#uploadModal').modal('hide');
+		});
+		
+		$("#myModal,#uploadModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
-		    initTable('/listShop.action'); // 重新加载数据
+		    initTable('/listFruit.action'); // 重新加载数据
 		});
 
 		function initTable(url) {
@@ -202,58 +246,29 @@
 			          valign: 'middle',
 			          visible: false,
 			        }, {
-			          title: '姓名',
-			          field: 'ShopName',
-			          align: 'center'
-			        },{
-			          title: '角色ID',
-			          field: 'roleId',
-			          align: 'center',
-			          visible: false,
-			        },{
-			          title: '角色',
-			          field: 'roleType',
+			          title: ' 水果种类',
+			          field: 'fruitClassifyName',
 			          align: 'center',
 			        }, {
-			          title: '性别',
-			          field: 'gender',
+			          title: '水果名称',
+			          field: 'fruitName',
+			          align: 'center'
+			        }, {
+			          title: '图片信息',
+			          field: 'pic',
 			          align: 'center',
-			          formatter: function (value, row, index) {//  用户性别 0：男  1：女
-			                if (value == '0') {
-			                	value = "男";
-			                } else if (value == '1') {
-			                	value = "女";
-			                }
-			          	return value;
+			          formatter: function (value, row, index) {
+		                if (value) {
+		                    return '<img onclick="showPic(\''+value+'\');" style="width: 50px;height:50px;" src="${requestScope.path}'+value+'"/>';
+		                }
 		              }
-			        },{
-			          title: '用户名',
-			          field: 'account',
-			          align: 'center'
-			        },{
-			          title: '密码',
-			          field: 'password',
-			          align: 'center',
-			          visible: false,
-			        },{
-			          title: '联系方式',
-			          field: 'phoneNum',
-			          align: 'center'
-			        },{
-			          title: '邮箱地址',
-			          field: 'email',
-			          align: 'center'
-			        },{
-			          title: '收货地址',
-			          field: 'address',
-			          align: 'center'
-			        },{
-			          title: '余额',
-			          field: 'balance',
-			          align: 'center'
 			        }
 		        ]]
 		    });
 		  }
+		
+		function showPic(value){
+			window.open('${requestScope.path}'+value);
+		}
 	</script>
 </html>

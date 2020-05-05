@@ -39,11 +39,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDo loginUser(String account, String pwd, Integer roleType) {
+	public UserDo loginUser(String account, String pwd, String roleTypeX) {
 		UserDo user = new UserDo();
 		user.setAccount(account);
 		user.setPassword(pwd);
-		user.setRoleType(roleType);
+		user.setRoleTypeX(roleTypeX);
 		return userDao.loginUser(user);
 	}
 

@@ -2,6 +2,7 @@ package com.oldbook.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
@@ -42,9 +43,21 @@ public class BookItemDaoImpl extends HibernateDaoSupport implements BookItemDao 
 	public List<BookItemDo> listBookItem(BookItemDo bookItem) {
 		StringBuffer hql = new StringBuffer();
 		hql.append(" from BookItemDo where 1=1");
-//		if(StringUtils.isNoneEmpty(bookItem.getBookItemName())) {
-//			hql.append(" and BookItemNAME like '%"+bookItem.getBookItemName()+"%'  ");
-//		}
+		if(StringUtils.isNotEmpty(bookItem.getBookName())) {
+			hql.append(" and bookName like '%"+bookItem.getBookName()+"%'  ");
+		}
+		if(StringUtils.isNotEmpty(bookItem.getBookTypeName())) {
+			hql.append(" and bookTypeName like '%"+bookItem.getBookTypeName()+"%'  ");
+		}
+		if(StringUtils.isNotEmpty(bookItem.getParentBookTypeName())) {
+			hql.append(" and parentBookTypeName like '%"+bookItem.getParentBookTypeName()+"%'  ");
+		}
+		if(StringUtils.isNotEmpty(bookItem.getShopName())) {
+			hql.append(" and shopName like '%"+bookItem.getShopName()+"%'  ");
+		}
+		if(bookItem.getAmount()!=null) {
+			hql.append(" and amount > 0");
+		}
 		@SuppressWarnings("unchecked")
 		List<BookItemDo> list = (List<BookItemDo>) super.getHibernateTemplate().find(hql.toString());
 		return list;

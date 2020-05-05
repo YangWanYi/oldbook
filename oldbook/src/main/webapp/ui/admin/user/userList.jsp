@@ -10,7 +10,7 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		<link href="https://cdn.bootcss.com/bootstrap-table/1.16.0/bootstrap-table.css" rel="stylesheet">
-		<title>店铺管理</title>
+		<title>用户管理</title>
 		<style type="text/css">
 			*{
 				padding: 0 0;
@@ -45,7 +45,7 @@
 				float: left;
 				padding: 5px 10px;
 			}
-			#searchShop{
+			#searchUser{
 			    margin-top: 4px;
    	 			margin-left: 10px;
 			}
@@ -54,15 +54,14 @@
 	<body>
 	
 		<div id="toolbar">
-			<div id="addShop" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增用户</div>
-			<div id="editShop" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑用户</div>
-			<div id="deleteShop" class="btn btn-danger">删除用户</div>
+			<div id="editUser" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑用户</div>
+			<div id="deleteUser" class="btn btn-danger">删除用户</div>
 			
 		</div>
 		<div class="searchItem">
 			<span>姓名</span>
-		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="ShopName" value="" placeholder="请输入姓名">
-			<div id="searchShop" class="btn btn-info">立即搜索</div>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="userName" value="" placeholder="请输入姓名">
+			<div id="searchUser" class="btn btn-info">立即搜索</div>
 			<div id="clearSearch" class="btn btn-secondary">清空</div>
 		</div>
 		
@@ -104,26 +103,18 @@
 	<script type="text/javascript">
 		var $table = $('#table');
 		$(function() {
-			initTable('/listShop.action');
+			initTable('/listUser.action');
 		});
 		
-		$('#searchShop').click(function(){ // 立即搜索
-			var ShopName = $("#ShopName").val();
-			initTable('/listShop.action?ShopName='+ShopName);
+		$('#searchUser').click(function(){ // 立即搜索
+			var userName = $("#userName").val();
+			initTable('/listUser.action?userName='+userName);
 		});
 		$('#clearSearch').click(function(){
-			$("#ShopName").val('');
-			initTable('/listShop.action');
+			$("#userName").val('');
+			initTable('/listUser.action');
 		});
-		$('#addShop').click(function(){
-			$("#winIframe").attr("src","addShop.jsp");
-			$('#myModal').on('shown.bs.modal', function () {
-				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
-				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('新增用户');// 修改modal的标题
-			});
-		});
-		$('#deleteShop').click(function(){
+		$('#deleteUser').click(function(){
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -137,11 +128,11 @@
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/deleteShop.action',
+					url: '/deleteUser.action',
 					data: {'ids': ids},
 					async: false,
 					success: function(s){
-						initTable('/listShop.action'); // 重新加载数据
+						initTable('/listUser.action'); // 重新加载数据
 					},
 					error: function(e){
 						alert("删除失败！");
@@ -149,7 +140,7 @@
 				});
 		    }
 		});
-		$('#editShop').click(function(){
+		$('#editUser').click(function(){
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -159,7 +150,7 @@
 				alert("只能选择一条数据！");
 				return false;
 			}
-			$("#winIframe").attr("src","/toUpdateShopPage.action?id="+row[0].id);
+			$("#winIframe").attr("src","/toUpdateUserPage.action?id="+row[0].id);
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
@@ -171,7 +162,7 @@
 			$.ajax({
 				type: 'post',
 				dataType: 'json',
-				url: '/saveOrUpdateShop.action',
+				url: '/saveOrUpdateUser.action',
 				data: $("#winIframe").contents().find("#myForm").serialize(),
 				async: false,
 				success: function(s){
@@ -185,7 +176,7 @@
 		
 		$("#myModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
-		    initTable('/listShop.action'); // 重新加载数据
+		    initTable('/listUser.action'); // 重新加载数据
 		});
 
 		function initTable(url) {
@@ -203,16 +194,16 @@
 			          visible: false,
 			        }, {
 			          title: '姓名',
-			          field: 'ShopName',
+			          field: 'userName',
 			          align: 'center'
 			        },{
 			          title: '角色ID',
-			          field: 'roleId',
+			          field: 'roleType',
 			          align: 'center',
 			          visible: false,
 			        },{
 			          title: '角色',
-			          field: 'roleType',
+			          field: 'roleTypeX',
 			          align: 'center',
 			        }, {
 			          title: '性别',
@@ -248,9 +239,23 @@
 			          field: 'address',
 			          align: 'center'
 			        },{
-			          title: '余额',
-			          field: 'balance',
-			          align: 'center'
+			          title: '创建时间',
+			          field: 'createTime',
+			          align: 'center',
+			          formatter: function (value, row, index) {
+			        	  if(value){
+			        		  return value.replace('T', ' ');
+			        	  }
+		              }
+			        },{
+			          title: '修改时间',
+			          field: 'updateTime',
+			          align: 'center',
+			          formatter: function (value, row, index) {
+			        	  if(value){
+			        		  return value.replace('T', ' ');
+			        	  }
+		              }
 			        }
 		        ]]
 		    });

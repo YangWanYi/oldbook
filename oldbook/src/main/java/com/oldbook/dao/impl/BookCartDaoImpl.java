@@ -2,6 +2,7 @@ package com.oldbook.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
@@ -42,9 +43,12 @@ public class BookCartDaoImpl extends HibernateDaoSupport implements BookCartDao 
 	public List<BookCartDo> listBookCart(BookCartDo bookCart) {
 		StringBuffer hql = new StringBuffer();
 		hql.append(" from BookCartDo where 1=1");
-//		if(StringUtils.isNoneEmpty(bookCart.getBookCartName())) {
-//			hql.append(" and BookCartNAME like '%"+bookCart.getBookCartName()+"%'  ");
-//		}
+		if(StringUtils.isNoneEmpty(bookCart.getBookName())) {
+			hql.append(" and bookName like '%"+bookCart.getBookName()+"%'  ");
+		}
+		if(bookCart.getUserId()!=null) {
+			hql.append(" and userId ="+bookCart.getUserId());
+		}
 		@SuppressWarnings("unchecked")
 		List<BookCartDo> list = (List<BookCartDo>) super.getHibernateTemplate().find(hql.toString());
 		return list;

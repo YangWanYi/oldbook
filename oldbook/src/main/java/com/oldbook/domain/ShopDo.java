@@ -53,14 +53,8 @@ public class ShopDo implements Serializable {
 	 * 店铺状态
 	 */
 	@Column(name = "SHOPSTATE")
-	private Integer shopState;
+	private String shopState;
 	
-	/**
-	 * 店主状态文本值
-	 */
-	@Column(name = "SHOPSTATEX")
-	private String shopStateX;
-
 	/**
 	 * 邮费
 	 */
@@ -77,7 +71,7 @@ public class ShopDo implements Serializable {
 	 * 店铺联系方式
 	 */
 	@Column(name = "CONTACTNUM")
-	private Integer contactNum;
+	private String contactNum;
 	
 	/**
 	 * 店铺地址
@@ -129,20 +123,12 @@ public class ShopDo implements Serializable {
 		this.userName = userName;
 	}
 
-	public Integer getShopState() {
+	public String getShopState() {
 		return shopState;
 	}
 
-	public void setShopState(Integer shopState) {
+	public void setShopState(String shopState) {
 		this.shopState = shopState;
-	}
-
-	public String getShopStateX() {
-		return shopStateX;
-	}
-
-	public void setShopStateX(String shopStateX) {
-		this.shopStateX = shopStateX;
 	}
 
 	public Date getApplyTime() {
@@ -153,11 +139,11 @@ public class ShopDo implements Serializable {
 		this.applyTime = applyTime;
 	}
 
-	public Integer getContactNum() {
+	public String getContactNum() {
 		return contactNum;
 	}
 
-	public void setContactNum(Integer contactNum) {
+	public void setContactNum(String contactNum) {
 		this.contactNum = contactNum;
 	}
 

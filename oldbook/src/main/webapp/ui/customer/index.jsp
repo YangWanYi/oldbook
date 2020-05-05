@@ -101,14 +101,57 @@
 			    font-size: 16px;
 			}
 			#myModal{
-				margin-top: 200px;
-			}
-			#shopModal{
 				margin-top: 100px;
 			}
 			iframe{
 				border: none;
 				width: 100%;
+				height: 100%;
+			}
+			.logined{
+				display: none;
+			}
+			#contentLeft{
+				width: 11%;
+				min-height:830px; 
+				padding-left: 10px;
+			}
+			#contentLeft ul li{
+				list-style: none;
+				cursor: pointer;
+			}
+			#contentRight{
+				width: 89%;
+				min-height:830px; 
+			}
+			.titleOfBook{
+			    text-align: left;
+			    height: 35px;
+			    line-height: 35px;
+			    width: 85%;
+			    font-family: fantasy;
+			    font-size: 18px;
+			    border-left: 5px solid red;
+			    margin: 10px 0px;
+			    padding-left: 5px;
+			}
+			.eachBook{
+				width: 300px;
+				float: left;
+				margin-left: 25px;
+				margin-bottom: 10px;
+				cursor: pointer;
+			}
+			.bookCover{
+				width: 300px;
+				height: 300px;
+			}
+			.noData{
+				text-align: center;
+				font-size: 28px;
+				font-family: monospace;
+				color: gray;
+				padding-top: 5%;
 			}
 		</style>
 	</head>
@@ -130,25 +173,45 @@
 			    		<span id="searchNow">搜索</span>
 			    	</div>
 			    </div>
-			  <div class="col-2">
-			   		<span class="topRightBtn logined applyShop" data-toggle="modal" data-target="#shopModal">申请开店</span>
+			    <div class="col-2">
+					<span class="topRightBtn applyShop" data-toggle="modal" data-target="#shopModal">申请开店</span>
 					<span class="topRightBtn logined myShop">我的店铺</span>
 					<span class="topRightBtn logined myCart">购物车</span>
 					<span class="topRightBtn logined myOrder">我的订单</span>
 			    </div>
-			  <div class="col-2">
+			   <div class="col-2">
 			   		<span class="topRight">
-			   			<span id="noLogin">
-			   				<span class="login topRightBtn" data-toggle="modal" data-target="#myModal">登录</span>|<span class="regist topRightBtn" data-toggle="modal" data-target="#myModal">注册</span>
-			   			</span>
-			   			<span class="logined">
-							<span class="topRightBtn personalMsg" data-toggle="modal" data-target="#personalModal">${sessionScope.user.account}</span>|<span class="logout topRightBtn">退出</span>
-			   			</span>
-					</span>
+						<span class="topRightBtn personalMsg" data-toggle="modal" data-target="#myModal">${sessionScope.user.account}</span>|<span class="logout topRightBtn">退出</span>
+		   			</span>
 			    </div>
-		    </div>
+			  </div>
 			<div class="row centerPos">
-				<iframe id="centerFrame" src="ui/common/home.jsp" style="min-height: 820px;"></iframe>
+				<div id="contentLeft">
+					
+				</div>
+				<div id="contentRight">
+					<div class="swiper-container">
+					    <div class="swiper-wrapper">
+					        <div class="swiper-slide">
+								<img src="../imgs/banner_01.jpg"/>
+							</div>
+					        <div class="swiper-slide">
+								<img src="../imgs/banner_02.jpg"/>
+							</div>
+					        <div class="swiper-slide">
+								<img src="../imgs/banner_03.jpg"/>
+							</div>
+					        <div class="swiper-slide">
+								<img src="../imgs/banner_04.jpg"/>
+							</div>
+					    </div>
+					   <div class="swiper-pagination"></div><!--分页器。如果放置在swiper-container外面，需要自定义样式。-->
+					</div>
+					<div class="titleOfBook">书籍列表</div>
+					<div id="bookList">
+						
+					</div>
+				</div>
 			</div>
 			<div class="row bottom">
 			    <div class="col-12">
@@ -157,24 +220,6 @@
 			</div>
 		</div>
 		<!-- 模态框（Modal） 个人中心  -->
-		<div class="modal fade" id="personalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-		            <div class="modal-header">
-		                <h4 class="modal-title" id="myModalLabel"></h4>
-		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		            </div>
-		            <div class="modal-body">
-						<iframe id="personalIframe" width="100%" height="100%"></iframe>
-					</div>
-					<div class="modal-footer">
-		                <div class="btn btn-default" data-dismiss="modal">关闭</div>
-		                <div class="btn savePersonal btn-primary">确定</div>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-		<!-- 模态框（Modal） 登录注册  -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
@@ -185,6 +230,10 @@
 		            <div class="modal-body">
 						<iframe id="winIframe" width="100%" height="100%"></iframe>
 					</div>
+					 <div class="modal-footer">
+		                <div class="btn btn-default" data-dismiss="modal">关闭</div>
+		                <div class="btn saveNow btn-primary">确定</div>
+		            </div>
 		        </div>
 		    </div>
 		</div>
@@ -217,36 +266,88 @@
 		var roleTypeX = "${sessionScope.user.roleTypeX}";
 		var basePath = "<%=basePath%>";
 		$(function(){
-			if(userId == null || userId == ''){
-				$(".logined").hide();
-				$("#noLogin").show();
-			}else{
-				$(".logined").show();
-				$("#noLogin").hide();
-				if(roleTypeX!=null){
-					if(roleTypeX.indexOf('商家')!=-1||roleTypeX.indexOf('管理员')!=-1){
-						$(".applyShop").hide();
-					}
-					if(roleTypeX.indexOf('商家')==-1){
-						$(".myShop").hide();
-					}
-				}
+			showItems();
+			showBookList(null);
+			if(userId==null||userId==''){
+				location.href= basePath; 
 			}
+			if(roleTypeX!=null&&roleTypeX.indexOf('商家')!=-1){
+				$(".logined").show();
+				$(".applyShop").hide();
+			}
+			var mySwiper = new Swiper('.swiper-container', {
+				autoplay: true,//可选选项，自动滑动
+			    pagination: {
+			        el: '.swiper-pagination',
+		        },
+			});
 		});
+		function showItems(){
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: '/listBookType.action',
+				data: {'parentTypeId': 0},
+				async: false,
+				success: function(s){
+					var str = "";
+					if(s.total>0){
+						$(s.rows).each(function(m,n){
+							str += '<ul>'
+										+'<li><a onClick="showBookList(\''+n.typeName+'\');">'+n.typeName+'</a></li>'
+									+'</ul>';
+						});
+					}
+					$("#contentLeft").html(str);
+				},
+				error: function(e){
+					alert("书籍类型查询失败！");
+				}
+			});
+		}
+		function showBookList(bookTypeName){
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: '/listBookItem.action',
+				data: {'parentBookTypeName': bookTypeName, 'amount': '1'},
+				async: false,
+				success: function(s){
+					var str = "";
+					if(s.total>0){
+						var bookName = '';
+						$(s.rows).each(function(m,n){
+							bookName = n.bookName;
+							if(bookName.length>17){
+								bookName = bookName.substring(0,17)+'...';
+							}
+							str += '<div class="eachBook" onClick="showDetail(\''+n.id+'\');">'
+										+'<div><img class="bookCover" src="../imgs/upload/'+n.cover+'"/></div>'
+										+'<div>'+bookName+'</div>'
+										+'<div style="color:gray;">作者：'+n.author+'</div>'
+										+'<div style="color:red;">￥'+n.salePrice+'</div>'
+									+'</div>';
+						});
+					}else{
+						str = '<div class="noData">暂无数据！</div>';
+					}
+					$("#bookList").html(str);
+				},
+				error: function(e){
+					alert("书籍查询失败！");
+				}
+			});
+		}
+		
+		function showDetail(bookId){
+			window.open('/toViewBookItemPage.action?id='+bookId);
+		}
 		
 		var searchType = 'book';
 		$("#book").click(function(){ // 搜索商品
 			$("*").removeClass("active");
 			$(this).addClass("active");
 			searchType = 'book';
-		});
-		
-		$(".myCart").click(function(){ // 购物车
-			$("#centerFrame").attr('src', 'ui/customer/bookCartList.jsp');
-		});
-		
-		$(".myOrder").click(function(){ // 我的订单
-			$("#centerFrame").attr('src', 'ui/customer/tradeOrderList.jsp');
 		});
 		
 		$("#shop").click(function(){ // 搜索店铺
@@ -260,17 +361,28 @@
 			window.open(''); // 打开新的窗口显示搜索结果
 		});
 		
-		$(".savePersonal").click(function(){
+		$(".myShop").click(function(){ // 我的店铺
+			window.open('../merchant/index.jsp');
+		});
+		
+		$(".myCart").click(function(){ // 购物车
+			window.open('/toCustomerBookCartPage.action');
+		});
+		
+		$(".myOrder").click(function(){ // 我的订单
+			window.open('/toCustomerTradeOrderPage.action');
+		});
+		
+		$(".saveNow").click(function(){
 			$.ajax({
 				type: 'post',
 				dataType: 'json',
 				url: '/saveOrUpdateUser.action',
-				data: $("#personalIframe").contents().find("#myForm").serialize(),
+				data: $("#winIframe").contents().find("#myForm").serialize(),
 				async: false,
 				success: function(s){
-					$('#personalModal').modal('hide');
+					$('#myModal').modal('hide');
 					alert("修改成功！");
-					parent.location.reload();
 				},
 				error: function(e){
 					alert("修改失败！");
@@ -296,8 +408,8 @@
 
 		$(".personalMsg").click(function(){ // 去个人中心
 			if(userId!=null&&userId!=''){
-				$("#personalIframe").attr("src","/toUpdateUserPage.action?id="+userId);
-				$('#personalModal').on('shown.bs.modal', function () {
+				$("#winIframe").attr("src","/toUpdateUserPage.action?id="+userId);
+				$('#myModal').on('shown.bs.modal', function () {
 					$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 					$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
 					$(this).find('.modal-title').text('修改个人信息');// 修改modal的标题
@@ -307,7 +419,7 @@
 
 		$(".applyShop").click(function(){ // 申请开店
 			if(userId!=null&&userId!=''){
-				$("#shopIframe").attr("src","ui/customer/applyShop.jsp");
+				$("#shopIframe").attr("src","applyShop.jsp");
 				$('#shopModal').on('shown.bs.modal', function () {
 					$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 					$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
@@ -316,24 +428,8 @@
 			}
 		});
 		
-		$("#myModal,#shopModal,#personalModal").on("hidden.bs.modal", function() {
+		$("#myModal,#shopModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
-		});
-		
-		$(".regist").click(function(){ // 去注册
-			$("#winIframe").attr('src','ui/common/regist.jsp');
-			$('#myModal').on('shown.bs.modal', function () {
-				$(this).find('.modal-content').css('height','280px');// 修改modal的高度
-				$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
-			});
-		});
-		
-		$(".login").click(function(){ // 去登录
-			$("#winIframe").attr('src','ui/common/login.jsp');
-			$('#myModal').on('shown.bs.modal', function () {
-				$(this).find('.modal-content').css('height','280px');// 修改modal的高度
-				$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
-			});
 		});
 		
 		$(".logout").click(function(){ // 退出
@@ -354,4 +450,3 @@
 		});
 	</script>
 </html>
-		

@@ -12,8 +12,8 @@
 			<result name="none" type="json"></result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
-		<action name="saveOrUpdate"  class="com.oldbook.action.UserAction" method="saveOrUpdate">
-			<result name="success" type="json">
+		<action name="saveOrUpdateUser"  class="com.oldbook.action.UserAction" method="saveOrUpdateUser">
+			<result name="none" type="json">
 				<param name="root">action</param>
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
@@ -29,7 +29,7 @@
 		</action>
 		<action name="toUpdateUserPage"
 			class="com.oldbook.action.UserAction" method="toUpdateUserPage">
-			<result name="success">ui/admin/user/user/editUser.jsp</result>
+			<result name="success">ui/admin/user/editUser.jsp</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
 		<action name="listUser" class="com.oldbook.action.UserAction" method="listUser">
@@ -47,8 +47,14 @@
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
-		<action name="saveOrUpdate"  class="com.oldbook.action.TradeOrderAction" method="saveOrUpdate">
-			<result name="success" type="json">
+		<action name="saveOrUpdateTradeOrder"  class="com.oldbook.action.TradeOrderAction" method="saveOrUpdateTradeOrder">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="payTradeOrder"  class="com.oldbook.action.TradeOrderAction" method="payTradeOrder">
+			<result name="none" type="json">
 				<param name="root">action</param>
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
@@ -63,6 +69,11 @@
 			<result name="success">ui/merchant/tradeOrder/editTradeOrder.jsp</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
+		<action name="toCustomerTradeOrderPage"
+			class="com.oldbook.action.TradeOrderAction" method="toCustomerTradeOrderPage">
+			<result name="success">ui/customer/tradeOrderList.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
 	</package>
 	
 	<package name="shop" extends="struts-default,json-default" namespace="/">
@@ -72,8 +83,8 @@
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
-		<action name="saveOrUpdate"  class="com.oldbook.action.ShopAction" method="saveOrUpdate">
-			<result name="success" type="json">
+		<action name="saveOrUpdateShop"  class="com.oldbook.action.ShopAction" method="saveOrUpdateShop">
+			<result name="none" type="json">
 				<param name="root">action</param>
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
@@ -91,14 +102,24 @@
 	</package>
 	
 	<package name="bookItem" extends="struts-default,json-default" namespace="/">
+		<action name="toBookItemListPage"
+			class="com.oldbook.action.BookItemAction" method="toBookItemListPage">
+			<result name="success">ui/merchant/bookItem/bookItemList.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toAddBookItemPage"
+			class="com.oldbook.action.BookItemAction" method="toAddBookItemPage">
+			<result name="success">ui/merchant/bookItem/addBookItem.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
 		<action name="listBookItem" class="com.oldbook.action.BookItemAction">
 			<result name="none" type="json">
 				<param name="root">action</param>
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
-		<action name="saveOrUpdate"  class="com.oldbook.action.BookItemAction" method="saveOrUpdate">
-			<result name="success" type="json">
+		<action name="saveOrUpdateBookItem"  class="com.oldbook.action.BookItemAction" method="saveOrUpdateBookItem">
+			<result name="none" type="json">
 				<param name="root">action</param>
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
@@ -113,6 +134,11 @@
 			<result name="success">ui/merchant/bookItem/editBookItem.jsp</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
+		<action name="toViewBookItemPage"
+			class="com.oldbook.action.BookItemAction" method="toViewBookItemPage">
+			<result name="success">ui/customer/bookDetail.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
 	</package>
 	
 	<package name="bookCart" extends="struts-default,json-default" namespace="/">
@@ -122,8 +148,8 @@
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
-		<action name="saveOrUpdate"  class="com.oldbook.action.BookCartAction" method="saveOrUpdate">
-			<result name="success" type="json">
+		<action name="saveOrUpdateBookCart"  class="com.oldbook.action.BookCartAction" method="saveOrUpdateBookCart">
+			<result name="none" type="json">
 				<param name="root">action</param>
 			</result>
 			<result name="error" type="redirect">error.jsp</result>
@@ -133,9 +159,68 @@
 			<result name="none" type="json"></result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
+		<action name="submitOrder"
+			class="com.oldbook.action.BookCartAction" method="submitOrder">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
 		<action name="toUpdateBookCartPage"
 			class="com.oldbook.action.BookCartAction" method="toUpdateBookCartPage">
 			<result name="success">ui/customer/bookCart/editBookCart.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toCustomerBookCartPage"
+			class="com.oldbook.action.BookCartAction" method="toCustomerBookCartPage">
+			<result name="success">ui/customer/bookCartList.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="bookType" extends="struts-default,json-default" namespace="/">
+		<action name="listBookType" class="com.oldbook.action.BookTypeAction">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="saveOrUpdateBookType"  class="com.oldbook.action.BookTypeAction" method="saveOrUpdateBookType">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="deleteBookType"
+			class="com.oldbook.action.BookTypeAction" method="deleteBookType">
+			<result name="none" type="json"></result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toUpdateBookTypePage"
+			class="com.oldbook.action.BookTypeAction" method="toUpdateBookTypePage">
+			<result name="success">ui/admin/bookType/editBookType.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<!-- 上传相关 -->
+	<package name="upload" extends="struts-default,json-default" namespace="/">
+		<action name="uploadPic" class="com.oldbook.action.UploadAction" method="uploadPic">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+		</action>
+		<action name="toUploadPage" class="com.oldbook.action.UploadAction" method="toUploadPage">
+			<result name="success">ui/merchant/bookItem/uploadPic.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="common" extends="struts-default,json-default" namespace="/">
+		<action name="toTopPage" class="com.oldbook.action.CommonAction" method="toTopPage">
+			<result name="success">ui/common/top.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toBottomPage" class="com.oldbook.action.CommonAction" method="toBottomPage">
+			<result name="success">ui/common/bottom.jsp</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
 	</package>

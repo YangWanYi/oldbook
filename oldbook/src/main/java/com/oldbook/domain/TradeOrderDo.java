@@ -1,7 +1,7 @@
 package com.oldbook.domain;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +28,12 @@ public class TradeOrderDo implements Serializable {
 	private Integer id;
 
 	/**
+	 * 购物车ID
+	 */
+	@Column(name = "CARTID")
+	private Integer cartId;
+	
+	/**
 	 * 姓名ID
 	 */
 	@Column(name = "USERID")
@@ -40,17 +46,17 @@ public class TradeOrderDo implements Serializable {
 	private String userName;
 	
 	/**
+	 * 书名
+	 */
+	@Column(name = "BOOKNAME")
+	private String bookName;
+	
+	/**
 	 * 订单状态
 	 */
 	@Column(name = "ORDERSTATE")
-	private Integer orderState;
+	private String orderState;
 	
-	/**
-	 * 订单状态文本值
-	 */
-	@Column(name = "ORDERSTATEX")
-	private Integer orderStateX;
-
 	/**
 	 * 总额
 	 */
@@ -117,20 +123,12 @@ public class TradeOrderDo implements Serializable {
 		this.userName = userName;
 	}
 
-	public Integer getOrderState() {
+	public String getOrderState() {
 		return orderState;
 	}
 
-	public void setOrderState(Integer orderState) {
+	public void setOrderState(String orderState) {
 		this.orderState = orderState;
-	}
-
-	public Integer getOrderStateX() {
-		return orderStateX;
-	}
-
-	public void setOrderStateX(Integer orderStateX) {
-		this.orderStateX = orderStateX;
 	}
 
 	public Double getTotalPrice() {
@@ -188,6 +186,21 @@ public class TradeOrderDo implements Serializable {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+
+	public Integer getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Integer cartId) {
+		this.cartId = cartId;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
 	
 }

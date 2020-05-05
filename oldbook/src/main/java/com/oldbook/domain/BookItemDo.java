@@ -46,6 +46,24 @@ public class BookItemDo implements Serializable {
 	private String bookName;
 	
 	/**
+	 * 类型id
+	 */
+	@Column(name = "BOOKTYPEID")
+	private Integer bookTypeId;
+	
+	/**
+	 * 父类型名称
+	 */
+	@Column(name = "PARENTBOOKTYPENAME")
+	private String parentBookTypeName;
+	
+	/**
+	 * 类型名称
+	 */
+	@Column(name = "BOOKTYPENAME")
+	private String bookTypeName;
+	
+	/**
 	 * 书本封面
 	 */
 	@Column(name = "COVER")
@@ -128,6 +146,12 @@ public class BookItemDo implements Serializable {
 	 */
 	@Column(name = "UPLOADTIME")
 	private Date uploadTime;
+	
+	/**
+	 * 简介
+	 */
+	@Column(name = "INTRODUCE")
+	private String introduce;
 
 	public Integer getId() {
 		return id;
@@ -271,6 +295,38 @@ public class BookItemDo implements Serializable {
 
 	public void setUploadTime(Date uploadTime) {
 		this.uploadTime = uploadTime;
+	}
+
+	public Integer getBookTypeId() {
+		return bookTypeId;
+	}
+
+	public String getBookTypeName() {
+		return bookTypeName;
+	}
+
+	public void setBookTypeId(Integer bookTypeId) {
+		this.bookTypeId = bookTypeId;
+	}
+
+	public void setBookTypeName(String bookTypeName) {
+		this.bookTypeName = bookTypeName;
+	}
+
+	public String getParentBookTypeName() {
+		return parentBookTypeName;
+	}
+
+	public void setParentBookTypeName(String parentBookTypeName) {
+		this.parentBookTypeName = parentBookTypeName;
+	}
+
+	public String getIntroduce() {
+		return introduce;
+	}
+
+	public void setIntroduce(String introduce) {
+		this.introduce = introduce;
 	}
 	
 	

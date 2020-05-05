@@ -8,68 +8,161 @@
 		<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">  
 		<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">  
 		<style type="text/css">
-			.aboutMsg{
-				text-align: center;
+			*{
+				padding: 0 0;
+				margin: 0 0;
 			}
-			.aboutUs{
-				border-bottom: 1px solid red;
-			    display: inline-block;
-			    margin: 15px;
-			    letter-spacing: 1px;
-			    font-size: large;
-			    font-family: initial;
-			    font-weight: 400;
+			body{
+				width: 100%;
+				height: 100%;
+				overflow-x: hidden; 
 			}
-			.aboutDetail{
-				width: 40%;
-			    display: inline-block;
-			    text-indent: 3rem;
+			#contentLeft{
+				width: 11%;
+				padding-left: 10px;
+				float: left;
+			}
+			#contentLeft ul li{
+				list-style: none;
+				cursor: pointer;
+				line-height: 35px;
+			}
+			.titleOfBook{
 			    text-align: left;
-			    color: #54220c;
-			    line-height: 25px;
+			    height: 35px;
+			    line-height: 35px;
+			    font-family: fantasy;
+			    font-size: 18px;
+			    border-left: 5px solid red;
+			    margin: 10px 0px;
+			    margin-left: 11%;
+			}
+			.eachBook{
+				width: 300px;
+				float: left;
+				margin-left: 25px;
+				margin-bottom: 10px;
+				cursor: pointer;
+			}
+			.bookCover{
+				width: 300px;
+				height: 300px;
+			}
+			.noData{
+				text-align: center;
+				font-size: 28px;
+				font-family: monospace;
+				color: gray;
+				padding-top: 5%;
+			}
+			#bookList{
+				padding-left: 11%;
 			}
 		</style>  
 	</head>
 	<body>
-		<div class="swiper-container">
-		    <div class="swiper-wrapper">
-		        <div class="swiper-slide">
-					<img src="../../imgs/home-banner-01.jpeg"/>
-				</div>
-		        <div class="swiper-slide">
-					<img src="../../imgs/home-banner-02.jpeg"/>
-				</div>
-		        <div class="swiper-slide">
-					<img src="../../imgs/home-banner-03.jpeg"/>
-				</div>
-		        <div class="swiper-slide">
-					<img src="../../imgs/home-banner-04.jpeg"/>
-				</div>
-		    </div>
-		    <!-- 如果需要导航按钮 -->
-		    <div class="swiper-button-prev"></div>
-		    <div class="swiper-button-next"></div>
+		<div id="contentLeft">
+					
 		</div>
-		<div class="col-12 aboutMsg">
-			<span class="aboutUs">关于我们</span>
-		</div> 
-		${userData.account}
-		<div class="col-12 aboutMsg">
-			<span class="aboutDetail">
-				优易水果商城产品定位主要以中高端水果为主，目前水果品类主要涵盖三大类:进口水果、地域特色水果、时令水果三大类近100多个品种，目前与各产地水果基地建立了紧密的战略合作关系，直接基地采购的比例在逐步扩大，未来计划将建立自己的水果种植基地，相关计划已经在紧锣密鼓的准备中。欢迎关注！
-			</span>
-		</div> 
+		<div id="contentRight">
+			<div class="swiper-container">
+			    <div class="swiper-wrapper">
+			        <div class="swiper-slide">
+						<img src="../imgs/banner_01.jpg"/>
+					</div>
+			        <div class="swiper-slide">
+						<img src="../imgs/banner_02.jpg"/>
+					</div>
+			        <div class="swiper-slide">
+						<img src="../imgs/banner_03.jpg"/>
+					</div>
+			        <div class="swiper-slide">
+						<img src="../imgs/banner_04.jpg"/>
+					</div>
+			    </div>
+			   <div class="swiper-pagination"></div><!--分页器。如果放置在swiper-container外面，需要自定义样式。-->
+			</div>
+			<div class="titleOfBook">书籍列表</div>
+			<div id="bookList">
+				
+			</div>
+		</div>
 	</body>
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/swiper/js/swiper.js"> </script>  
 	<script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>
 	<script type="text/javascript">
-		var mySwiper = new Swiper('.swiper-container', {
-			autoplay: true,//可选选项，自动滑动
-			navigation: {
-		      nextEl: '.swiper-button-next',
-		      prevEl: '.swiper-button-prev',
-		    }
+		$(function(){
+			showItems();
+			showBookList(null);
+			var mySwiper = new Swiper('.swiper-container', {
+				autoplay: true,//可选选项，自动滑动
+			    pagination: {
+			        el: '.swiper-pagination',
+		        },
+			});
 		});
+		function showItems(){
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: '/listBookType.action',
+				data: {'parentTypeId': 0},
+				async: false,
+				success: function(s){
+					var str = "";
+					if(s.total>0){
+						$(s.rows).each(function(m,n){
+							str += '<ul>'
+										+'<li><a onClick="showBookList(\''+n.typeName+'\');">'+n.typeName+'</a></li>'
+									+'</ul>';
+						});
+					}
+					$("#contentLeft").html(str);
+				},
+				error: function(e){
+					alert("书籍类型查询失败！");
+				}
+			});
+		}
+		function showBookList(bookTypeName){
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: '/listBookItem.action',
+				data: {'parentBookTypeName': bookTypeName},
+				async: false,
+				success: function(s){
+					var str = "";
+					if(s.total>0){
+						var bookName = '';
+						$(s.rows).each(function(m,n){
+							bookName = n.bookName;
+							if(bookName.length>17){
+								bookName = bookName.substring(0,17)+'...';
+							}
+							str += '<div class="eachBook" onClick="showDetail(\''+n.id+'\');">'
+										+'<div><img class="bookCover" src="../imgs/upload/'+n.cover+'"/></div>'
+										+'<div>'+bookName+'</div>'
+										+'<div style="color:gray;">作者：'+n.author+'</div>'
+										+'<div style="color:red;">￥'+n.salePrice+'</div>'
+									+'</div>';
+						});
+					}else{
+						str = '<div class="noData">暂无数据！</div>';
+					}
+					$("#bookList").html(str);
+				},
+				error: function(e){
+					alert("书籍查询失败！");
+				}
+			});
+		}
+		
+		function showDetail(bookId){
+			window.open('/toViewBookItemPage.action?id='+bookId);
+		}
 	</script>
 </html>

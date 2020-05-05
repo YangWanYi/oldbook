@@ -11,7 +11,7 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 		<link href="https://cdn.bootcss.com/bootstrap-table/1.16.0/bootstrap-table.css" rel="stylesheet">
-		<title>水果维护</title>
+		<title>书籍管理</title>
 		<style type="text/css">
 			*{
 				padding: 0 0;
@@ -46,7 +46,7 @@
 				float: left;
 				padding: 5px 10px;
 			}
-			#searchFruit{
+			#searchBookItem{
 			    margin-top: 4px;
    	 			margin-left: 10px;
 			}
@@ -55,16 +55,18 @@
 	<body>
 	
 		<div id="toolbar">
-			<div id="addFruit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增水果</div>
-			<div id="editFruit" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑水果</div>
-			<div id="deleteFruit" class="btn btn-danger">删除水果</div>
+			<div id="addBookItem" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增书籍</div>
+			<div id="editBookItem" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑书籍</div>
+			<div id="deleteBookItem" class="btn btn-danger">删除书籍</div>
 			<div id="uploadPic" class="btn btn-warning" data-toggle="modal" data-target="#uploadModal">上传图片</div>
 			
 		</div>
 		<div class="searchItem">
-			<span>水果名称</span>
-		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="fruitName" value="" placeholder="请输入水果名称">
-			<div id="searchFruit" class="btn btn-info">立即搜索</div>
+			<span>类型名称</span>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="bookTypeName" value="" placeholder="请输入类型名称">
+			<span>书籍名称</span>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="bookName" value="" placeholder="请输入书籍名称">
+			<div id="searchBookItem" class="btn btn-info">立即搜索</div>
 			<div id="clearSearch" class="btn btn-secondary">清空</div>
 		</div>
 		
@@ -126,26 +128,28 @@
 	<script type="text/javascript">
 		var $table = $('#table');
 		$(function() {
-			initTable('/listFruit.action');
+			initTable('/listBookItem.action');
 		});
 		
-		$('#searchFruit').click(function(){ // 立即搜索
-			var fruitName = $("#fruitName").val(); 
-			initTable('/listFruit.action?fruitName='+fruitName);
+		$('#searchBookItem').click(function(){ // 立即搜索
+			var bookTypeName = $("#bookTypeName").val(); 
+			var bookName = $("#bookName").val(); 
+			initTable('/listBookItem.action?bookTypeName='+bookTypeName+'&bookName='+bookName);
 		});
 		$('#clearSearch').click(function(){
-			$("#fruitName").val('');
-			initTable('/listFruit.action');
+			$("#bookTypeName").val('');
+			$("#bookName").val('');
+			initTable('/listBookItem.action');
 		});
-		$('#addFruit').click(function(){
-			$("#winIframe").attr("src","/toAddFruitPage.action");
+		$('#addBookItem').click(function(){
+			$("#winIframe").attr("src","/toAddBookItemPage.action");
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('新增水果');// 修改modal的标题
+				$(this).find('.modal-title').text('新增书籍');// 修改modal的标题
 			});
 		});
-		$('#deleteFruit').click(function(){
+		$('#deleteBookItem').click(function(){
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -159,11 +163,11 @@
 				$.ajax({
 					type: 'post',
 					dataType: 'json',
-					url: '/deleteFruit.action',
+					url: '/deleteBookItem.action',
 					data: {'ids': ids},
 					async: false,
 					success: function(s){
-						initTable('/listFruit.action'); // 重新加载数据
+						initTable('/listBookItem.action'); // 重新加载数据
 					},
 					error: function(e){
 						alert("删除失败！");
@@ -185,11 +189,11 @@
 			$('#uploadModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','500px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('上传图片');// 修改modal的标题
+				$(this).find('.modal-title').text('上传书籍封面');// 修改modal的标题
 			});
 		});
 		
-		$('#editFruit').click(function(){
+		$('#editBookItem').click(function(){
 			var row = $table.bootstrapTable('getSelections');
 			if(row.length == 0){
 				alert("请选择数据！");
@@ -199,11 +203,11 @@
 				alert("只能选择一条数据！");
 				return false;
 			}
-			$("#winIframe").attr("src","/toUpdateFruitPage.action?id="+row[0].id);
+			$("#winIframe").attr("src","/toUpdateBookItemPage.action?id="+row[0].id);
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('编辑水果');// 修改modal的标题
+				$(this).find('.modal-title').text('编辑书籍');// 修改modal的标题
 			});
 		});
 		
@@ -211,7 +215,7 @@
 			$.ajax({
 				type: 'post',
 				dataType: 'json',
-				url: '/saveOrUpdateFruit.action',
+				url: '/saveOrUpdateBookItem.action',
 				data: $("#winIframe").contents().find("#myForm").serialize(),
 				async: false,
 				success: function(s){
@@ -230,7 +234,7 @@
 		
 		$("#myModal,#uploadModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
-		    initTable('/listFruit.action'); // 重新加载数据
+		    initTable('/listBookItem.action'); // 重新加载数据
 		});
 
 		function initTable(url) {
@@ -247,21 +251,91 @@
 			          valign: 'middle',
 			          visible: false,
 			        }, {
-			          title: ' 水果种类',
-			          field: 'fruitClassifyName',
+			          title: '父类型名称',
+			          field: 'parentBookTypeName',
 			          align: 'center',
 			        }, {
-			          title: '水果名称',
-			          field: 'fruitName',
+			          title: ' 类型名称',
+			          field: 'bookTypeName',
+			          align: 'center',
+			        }, {
+			          title: '书名',
+			          field: 'bookName',
 			          align: 'center'
 			        }, {
-			          title: '图片信息',
-			          field: 'pic',
+			          title: '封面',
+			          field: 'cover',
 			          align: 'center',
 			          formatter: function (value, row, index) {
 		                if (value) {
 		                    return '<img onclick="showPic(\''+value+'\');" style="width: 50px;height:50px;" src="${requestScope.path}'+value+'"/>';
 		                }
+		              }
+			        }, {
+			          title: '售价',
+			          field: 'salePrice',
+			          align: 'center'
+			        },{
+			          title: '库存',
+			          field: 'amount',
+			          align: 'center'
+			        },{
+			          title: '作者',
+			          field: 'author',
+			          align: 'center'
+			        },{
+			          title: '版次',
+			          field: 'edition',
+			          align: 'center'
+			        },{
+			          title: '纸张',
+			          field: 'paper',
+			          align: 'center'
+			        },{
+			          title: '出版社',
+			          field: 'publisher',
+			          align: 'center'
+			        },{
+			          title: '装帧',
+			          field: 'graphic',
+			          align: 'center'
+			        },{
+			          title: '页数',
+			          field: 'pagination',
+			          align: 'center'
+			        },{
+			          title: 'ISBN',
+			          field: 'isbn',
+			          align: 'center'
+			        },{
+			          title: '开本',
+			          field: 'bookSize',
+			          align: 'center'
+			        },{
+			          title: '字数',
+			          field: 'wordCount',
+			          align: 'center'
+			        },{
+			          title: '简介',
+			          field: 'introduce',
+			          align: 'center'
+			        },{
+			          title: '出版时间',
+			          field: 'pubtime',
+			          align: 'center',
+			          formatter: function (value, row, index) {
+			        	  if(value){
+			        		  return value.replace('T', ' ');
+			        	  }
+		              }
+			        },{
+			          title: '上架时间',
+			          field: 'uploadTime',
+			          align: 'center',
+			          formatter: function (value, row, index) {
+			        	  if(value){
+			        		  return value.replace('T', ' ');
+			        	  }
 		              }
 			        }
 		        ]]

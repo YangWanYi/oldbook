@@ -78,7 +78,7 @@ public class BookCartDo implements Serializable {
 	 * 是否提交订单
 	 */
 	@Column(name = "SUBMITORDER")
-	private Integer submitOrder;
+	private String submitOrder;
 
 	public Integer getId() {
 		return id;
@@ -110,10 +110,6 @@ public class BookCartDo implements Serializable {
 
 	public Integer getAmount() {
 		return amount;
-	}
-
-	public Integer getSubmitOrder() {
-		return submitOrder;
 	}
 
 	public void setId(Integer id) {
@@ -148,10 +144,6 @@ public class BookCartDo implements Serializable {
 		this.amount = amount;
 	}
 
-	public void setSubmitOrder(Integer submitOrder) {
-		this.submitOrder = submitOrder;
-	}
-
 	public Double getUnitPrice() {
 		return unitPrice;
 	}
@@ -159,4 +151,13 @@ public class BookCartDo implements Serializable {
 	public void setUnitPrice(Double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+
+	public String getSubmitOrder() {
+		return submitOrder;
+	}
+
+	public void setSubmitOrder(String submitOrder) {
+		this.submitOrder = submitOrder;
+	}
+	
 }

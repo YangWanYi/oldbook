@@ -42,7 +42,19 @@ public class UserDaoImpl extends HibernateDaoSupport  implements UserDao {
 	@Override
 	public UserDo loginUser(UserDo user) {
 		UserDo userDo = null;
-		List<UserDo> list = super.getHibernateTemplate().findByExample(user);
+		StringBuffer hql=new StringBuffer();
+		hql.append(" from UserDo where 1=1");
+		if(StringUtils.isNoneEmpty(user.getAccount())) {
+			hql.append(" and ACCOUNT ='"+user.getAccount()+"'");
+		}
+		if(StringUtils.isNoneEmpty(user.getPassword())) {
+			hql.append(" and PASSWORD ='"+user.getPassword()+"'");
+		}
+		if(StringUtils.isNoneEmpty(user.getRoleTypeX())) {
+			hql.append(" and roleTypeX like '%"+user.getRoleTypeX()+"%'  ");
+		}
+		@SuppressWarnings("unchecked")
+		List<UserDo> list= (List<UserDo>) super.getHibernateTemplate().find(hql.toString());
 		if (list.size() > 0) { // 同一个账号只可能存在一个 所以取第一条数据即可
 			userDo = list.get(0);
 		}

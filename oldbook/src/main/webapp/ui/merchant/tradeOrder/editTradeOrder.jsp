@@ -9,7 +9,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<title>编辑水果</title>
+		<title>编辑订单</title>
 		<style type="text/css">
 			*{
 				padding: 0 0;
@@ -24,20 +24,40 @@
 	</head>
 	<body>
 		<form id="myForm">
-			<input type="hidden" name="id" value="${requestScope.fruitData.id}">
-			<input type="hidden" name="pic" value="${requestScope.fruitData.pic}">
+			<input type="hidden" name="id" value="${requestScope.tradeOrderData.id}">
+			<input type="hidden" name="cartId" value="${requestScope.tradeOrderData.cartId}">
+			<input type="hidden" name="userId" value="${requestScope.tradeOrderData.userId}">
+			<input type="hidden" name="userName" value="${requestScope.tradeOrderData.userName}">
+			<input type="hidden" name="createTime" value="${requestScope.tradeOrderData.createTime}">
+			<input type="hidden" name="payTime" value="${requestScope.tradeOrderData.payTime}">
 			<div class="form-group row">
-			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">水果种类</label>
-			    <div class="col-sm-10">
-					<select class="form-control" name="fruitClassifyID" id="fruitClassifyID">
-					
-					</select>
+			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">书籍名称</label>
+			    <div class="col-sm-6">
+			      <input type="text" class="form-control" id="colFormLabelSm" name="bookName" value="${requestScope.tradeOrderData.bookName}" readonly="readonly">
 			    </div>
 			</div>
 			<div class="form-group row">
-			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">水果名称</label>
+			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">订单状态</label>
 			    <div class="col-sm-6">
-			      <input type="text" class="form-control" id="colFormLabelSm" name="fruitName" value="${requestScope.fruitData.fruitName}" placeholder="请输入水果名称">
+			      <input type="text" class="form-control" id="colFormLabelSm" name="orderState" value="${requestScope.tradeOrderData.orderState}" readonly="readonly">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">总额（元）</label>
+			    <div class="col-sm-6">
+			      <input type="number" class="form-control" id="colFormLabelSm" name="totalPrice" value="${requestScope.tradeOrderData.totalPrice}">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">邮费（元）</label>
+			    <div class="col-sm-6">
+			      <input type="number" class="form-control" id="colFormLabelSm" name="postage" value="${requestScope.tradeOrderData.postage}">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">预计送达时间</label>
+			    <div class="col-sm-6">
+			      <input type="date" class="form-control" id="colFormLabelSm" name="planDeliveryTime" value="${requestScope.tradeOrderData.planDeliveryTime}">
 			    </div>
 			</div>
 		</form>
@@ -45,30 +65,4 @@
 	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		$(function(){
-			$(function(){
-				$.ajax({
-					type: 'post',
-					dataType: 'json',
-					url: '/listFruitClassify.action',
-					async: false,
-					success: function(s){
-						var str = "";
-						if(s.total>0){
-							$(s.rows).each(function(m,n){
-								str += '<option value="'+n.id+'">'+n.classifyName+'</option>';
-							});
-						}
-						$("#fruitClassifyID").html(str);
-					},
-					error: function(e){
-						alert("水果种类查询失败！");
-					}
-				});
-			});
-		});
-		
-		$('#fruitClassifyID').find('option[value="${requestScope.fruitData.fruitClassifyID}"]').attr('selected','selected'); //水果分类回显
-	</script>
 </html>

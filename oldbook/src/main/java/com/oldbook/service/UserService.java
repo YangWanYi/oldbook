@@ -14,7 +14,7 @@ public interface UserService {
 
 	UserDo selectUserById(int userId);
 	
-	UserDo loginUser(String account, String pwd, Integer roleType);
+	UserDo loginUser(String account, String pwd, String roleTypeX);
 
 	public List<UserDo> listUser(UserDo user) throws Exception;
 }
