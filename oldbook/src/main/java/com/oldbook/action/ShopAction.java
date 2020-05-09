@@ -66,6 +66,7 @@ public class ShopAction implements Action, ModelDriven<ShopDo> {
 				}
 				this.shopService.insertShop(this.shopData);
 			}
+			ActionContext.getContext().getSession().put("shop", this.shopData);
 			return NONE;
 		} catch (Exception e) {
 			return ERROR;
@@ -103,6 +104,23 @@ public class ShopAction implements Action, ModelDriven<ShopDo> {
 		} catch (Exception e) {
 			return ERROR;
 		}
+	}
+	
+	public String toShopDetail() {
+		try {
+			if (this.shopData.getId() != null) {
+				this.shopData = this.shopService.selectShopById(this.shopData.getId());
+				return SUCCESS;
+			} else {
+				return ERROR;
+			}
+		} catch (Exception e) {
+			return ERROR;
+		}
+	}
+	
+	public String toShopList() {
+		return SUCCESS;
 	}
 
 	public List<ShopDo> getRows() {

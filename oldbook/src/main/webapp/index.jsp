@@ -115,7 +115,7 @@
 	<body>
 		<div class="content">
 			<div class="row top">
-			    <div class="col-4 logoPos">
+			    <div class="col-3 logoPos">
 			    	<span class="webName">旧书交易网</span>
 			    </div>
 			    <div class="col-4 searchBar">
@@ -130,11 +130,12 @@
 			    		<span id="searchNow">搜索</span>
 			    	</div>
 			    </div>
-			  <div class="col-2">
+			  <div class="col-3">
 			   		<span class="topRightBtn logined applyShop" data-toggle="modal" data-target="#shopModal">申请开店</span>
-					<span class="topRightBtn logined myShop">我的店铺</span>
+					<span class="topRightBtn logined myShop" data-toggle="modal" data-target="#shopModal">我的店铺</span>
 					<span class="topRightBtn logined myCart">购物车</span>
 					<span class="topRightBtn logined myOrder">我的订单</span>
+					<span class="topRightBtn logined myEmail">我的邮箱</span>
 			    </div>
 			  <div class="col-2">
 			   		<span class="topRight">
@@ -217,6 +218,9 @@
 		var roleTypeX = "${sessionScope.user.roleTypeX}";
 		var basePath = "<%=basePath%>";
 		$(function(){
+			$(".webName").click(function(){
+				location.href=basePath;
+			});
 			if(userId == null || userId == ''){
 				$(".logined").hide();
 				$("#noLogin").show();
@@ -245,8 +249,23 @@
 			$("#centerFrame").attr('src', 'ui/customer/bookCartList.jsp');
 		});
 		
+		$(".myShop").click(function(){ // 我的店铺
+			if(userId!=null&&userId!=''){
+				$("#shopIframe").attr("src","ui/merchant/shopLMsg.jsp");
+				$('#shopModal').on('shown.bs.modal', function () {
+					$(this).find('.modal-content').css('height','600px');// 修改modal的高度
+					$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
+					$(this).find('.modal-title').text('我的店铺');// 修改modal的标题
+				});
+			}
+		});
+		
 		$(".myOrder").click(function(){ // 我的订单
 			$("#centerFrame").attr('src', 'ui/customer/tradeOrderList.jsp');
+		});
+		
+		$(".myEmail").click(function(){ // 我的邮箱
+			$("#centerFrame").attr('src', '/toEmailList.action');
 		});
 		
 		$("#shop").click(function(){ // 搜索店铺
@@ -257,7 +276,12 @@
 		
 		$("#searchNow").click(function(){ // 立即搜索
 			var keyWords = $("#keyWords").val();
-			window.open(''); // 打开新的窗口显示搜索结果
+			if(searchType=='shop'){
+				$("#centerFrame").attr('src', '/toShopList.action?shopName='+keyWords);
+			}
+			if(searchType=='book'){
+				$("#centerFrame").attr('src','/toBookList.action?bookName='+keyWords);
+			}
 		});
 		
 		$(".savePersonal").click(function(){

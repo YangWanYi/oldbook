@@ -68,6 +68,12 @@ public class UserDo implements Serializable {
 	 */
 	@Column(name = "EMAIL")
 	private String email;
+	
+	/**
+	 * 邮箱授权码
+	 */
+	@Column(name = "EMAILCODE")
+	private String emailCode;
 
 	/**
 	 * 收货地址
@@ -173,6 +179,14 @@ public class UserDo implements Serializable {
 
 	public void setRoleTypeX(String roleTypeX) {
 		this.roleTypeX = roleTypeX;
+	}
+
+	public String getEmailCode() {
+		return emailCode;
+	}
+
+	public void setEmailCode(String emailCode) {
+		this.emailCode = emailCode;
 	}
 	
 }

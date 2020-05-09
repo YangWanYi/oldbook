@@ -99,6 +99,16 @@
 			<result name="success">ui/merchant/shop/editShop.jsp</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
+		<action name="toShopList"
+			class="com.oldbook.action.ShopAction" method="toShopList">
+			<result name="success">ui/customer/shopList.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toShopDetail"
+			class="com.oldbook.action.ShopAction" method="toShopDetail">
+			<result name="success">ui/customer/shopDetail.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
 	</package>
 	
 	<package name="bookItem" extends="struts-default,json-default" namespace="/">
@@ -137,6 +147,11 @@
 		<action name="toViewBookItemPage"
 			class="com.oldbook.action.BookItemAction" method="toViewBookItemPage">
 			<result name="success">ui/customer/bookDetail.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toBookList"
+			class="com.oldbook.action.BookItemAction" method="toBookList">
+			<result name="success">ui/customer/bookList.jsp</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
 	</package>
@@ -221,6 +236,28 @@
 		</action>
 		<action name="toBottomPage" class="com.oldbook.action.CommonAction" method="toBottomPage">
 			<result name="success">ui/common/bottom.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="email" extends="struts-default,json-default" namespace="/">
+		<action name="sendEmail" class="com.oldbook.action.SendEmailAction" method="sendEmail">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
+		</action>
+		<action name="toSendEmail" class="com.oldbook.action.SendEmailAction" method="toSendEmail">
+			<result name="success">ui/common/sendEmail.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="toEmailList" class="com.oldbook.action.SendEmailAction" method="toEmailList">
+			<result name="success">ui/common/emailList.jsp</result>
+			<result name="error" type="redirect">error.jsp</result>
+		</action>
+		<action name="listEmail" class="com.oldbook.action.SendEmailAction">
+			<result name="none" type="json">
+				<param name="root">action</param>
+			</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</action>
 	</package>

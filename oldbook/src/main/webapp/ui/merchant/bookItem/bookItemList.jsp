@@ -128,18 +128,18 @@
 	<script type="text/javascript">
 		var $table = $('#table');
 		$(function() {
-			initTable('/listBookItem.action');
+			initTable('/listBookItem.action?shopId=${sessionScope.shop.id}');
 		});
 		
 		$('#searchBookItem').click(function(){ // 立即搜索
 			var bookTypeName = $("#bookTypeName").val(); 
 			var bookName = $("#bookName").val(); 
-			initTable('/listBookItem.action?bookTypeName='+bookTypeName+'&bookName='+bookName);
+			initTable('/listBookItem.action?shopId=${sessionScope.shop.id}&bookTypeName='+bookTypeName+'&bookName='+bookName);
 		});
 		$('#clearSearch').click(function(){
 			$("#bookTypeName").val('');
 			$("#bookName").val('');
-			initTable('/listBookItem.action');
+			initTable('/listBookItem.action?shopId=${sessionScope.shop.id}');
 		});
 		$('#addBookItem').click(function(){
 			$("#winIframe").attr("src","/toAddBookItemPage.action");
@@ -167,7 +167,7 @@
 					data: {'ids': ids},
 					async: false,
 					success: function(s){
-						initTable('/listBookItem.action'); // 重新加载数据
+						initTable('/listBookItem.action?shopId=${sessionScope.shop.id}'); // 重新加载数据
 					},
 					error: function(e){
 						alert("删除失败！");
@@ -234,7 +234,7 @@
 		
 		$("#myModal,#uploadModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
-		    initTable('/listBookItem.action'); // 重新加载数据
+		    initTable('/listBookItem.action?shopId=${sessionScope.shop.id}'); // 重新加载数据
 		});
 
 		function initTable(url) {

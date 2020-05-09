@@ -68,6 +68,12 @@
 			    </div>
 			</div>
 			<div class="form-group row">
+			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">邮箱授权码</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" id="colFormLabelSm" name="emailCode" value="${requestScope.userData.emailCode}" placeholder="请输入邮箱授权码">
+			    </div>
+			</div>
+			<div class="form-group row">
 			    <label for="colFormLabelSm" class="col-sm-2 col-form-label">收货地址</label>
 			    <div class="col-sm-10">
 			    	<textarea class="form-control" id="exampleFormControlTextarea1" name="address" rows="9" placeholder="请输入收货地址">${requestScope.userData.address}</textarea>

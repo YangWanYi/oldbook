@@ -58,6 +58,9 @@ public class BookItemDaoImpl extends HibernateDaoSupport implements BookItemDao 
 		if(bookItem.getAmount()!=null) {
 			hql.append(" and amount > 0");
 		}
+		if(bookItem.getShopId()!=null) {
+			hql.append(" and shopId = "+bookItem.getShopId());
+		}
 		@SuppressWarnings("unchecked")
 		List<BookItemDo> list = (List<BookItemDo>) super.getHibernateTemplate().find(hql.toString());
 		return list;

@@ -22,7 +22,7 @@
 				overflow-x: hidden; 
 				padding: 0px 10px;
 			}
-			#winIframe{
+			iframe{
 				height: 100%;
 				width: 100%;
 				border: none;
@@ -54,6 +54,7 @@
 	<body>
 	
 		<div id="toolbar">
+			<div id="addUser" class="btn btn-info" data-toggle="modal" data-target="#myModal">新增用户</div>
 			<div id="editUser" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑用户</div>
 			<div id="deleteUser" class="btn btn-danger">删除用户</div>
 			
@@ -83,7 +84,24 @@
 		        </div>
 		    </div>
 		</div>
-        
+        <!-- 模态框（Modal） 发送邮件  -->
+		<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h4 class="modal-title" id="myModalLabel"></h4>
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		            </div>
+		            <div class="modal-body">
+						<iframe id="emailIframe" width="100%" height="100%"></iframe>
+					</div>
+					<div class="modal-footer">
+		                <div class="btn btn-default" data-dismiss="modal">关闭</div>
+		                <div class="btn sendNow btn-primary">确定</div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 		<table
 		  id="table"
 		  data-toolbar="#toolbar"
@@ -157,6 +175,14 @@
 				$(this).find('.modal-title').text('编辑用户');// 修改modal的标题
 			});
 		});
+		$('#addUser').click(function(){
+			$("#winIframe").attr("src","addUser.jsp");
+			$('#myModal').on('shown.bs.modal', function () {
+				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
+				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
+				$(this).find('.modal-title').text('新增用户');// 修改modal的标题
+			});
+		});
 		
 		$(".saveNow").click(function(){
 			$.ajax({
@@ -174,7 +200,7 @@
 			});
 		});
 		
-		$("#myModal").on("hidden.bs.modal", function() {
+		$("#myModal,#emailModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
 		    initTable('/listUser.action'); // 重新加载数据
 		});
@@ -195,7 +221,11 @@
 			        }, {
 			          title: '姓名',
 			          field: 'userName',
-			          align: 'center'
+			          align: 'center',
+			          width: 200,
+			          formatter: function (value, row, index) {
+		        		  return value+'&nbsp;&nbsp;<div data-toggle="modal" data-target="#emailModal" onclick="sendEmail(\''+row.id+'\')" class="btn btn-info">发送邮件</div>';
+		              }
 			        },{
 			          title: '角色ID',
 			          field: 'roleType',
@@ -260,5 +290,36 @@
 		        ]]
 		    });
 		  }
+		
+
+		function sendEmail(toWho){
+			$("#emailIframe").attr("src","/toSendEmail.action?"+
+					"sender=${sessionScope.user.email}&receiveId="+toWho+
+					"&receiveName=${requestScope.shopData.userName}"+
+					"&userId=${sessionScope.user.id}&userName=${sessionScope.user.userName}");
+			$('#emailModal').on('shown.bs.modal', function () {
+				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
+				$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
+				$(this).find('.modal-title').text('发送邮件');// 修改modal的标题
+			});
+		}
+		
+		$(".sendNow").click(function(){
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: '/sendEmail.action',
+				data: $("#emailIframe").contents().find("#myForm").serialize(),
+				async: false,
+				success: function(s){
+					$('#emailModal').modal('hide');
+					alert("邮件发送成功！");
+				},
+				error: function(e){
+					alert("邮件发送失败！");
+				}
+			});
+		});
+		
 	</script>
 </html>

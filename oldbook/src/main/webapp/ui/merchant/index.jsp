@@ -166,7 +166,15 @@
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	<script type="text/javascript">
+		var userId = "${sessionScope.user.id}";
+		var basePath = "<%=basePath%>";
 		$(function(){
+			$(".webName").click(function(){
+				location.href=basePath;
+			});
+			if(userId == null || userId == ''){
+				location.href=basePath;
+			}
 			var innerHeight = window.innerHeight;
 			$("#mainIframe").css('height', innerHeight-105+'px');
 		});
@@ -187,7 +195,7 @@
 		});
 		
 		$("#emailMng").click(function(){ // 邮件管理
-			$("#mainIframe").attr('src', 'email/emailList.jsp');
+			$("#mainIframe").attr('src', '/toEmailList.action');
 		});
 		
 		$(".saveShop").click(function(){

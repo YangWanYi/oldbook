@@ -88,6 +88,24 @@
 		        </div>
 		    </div>
 		</div>
+		<!-- 模态框（Modal） 发送邮件  -->
+		<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h4 class="modal-title" id="myModalLabel"></h4>
+		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		            </div>
+		            <div class="modal-body">
+						<iframe id="emailIframe" width="100%" height="100%"></iframe>
+					</div>
+					<div class="modal-footer">
+		                <div class="btn btn-default" data-dismiss="modal">关闭</div>
+		                <div class="btn sendNow btn-primary">确定</div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
 	</body>
 	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.js"></script>
@@ -98,17 +116,17 @@
 	<script type="text/javascript">
 		var $table = $('#table');
 		$(function() {
-			initTable('/listTradeOrder.action');
+			initTable('/listTradeOrder.action?shopId=${sessionScope.shop.id}');
 		});
 		
 		$('#searchTradeOrder').click(function(){ // 立即搜索
 			var bookName = $("#bookName").val(); 
-			initTable('/listTradeOrder.action?bookName='+bookName);
+			initTable('/listTradeOrder.action?shopId=${sessionScope.shop.id}&bookName='+bookName);
 		});
 		
 		$('#clearSearch').click(function(){
 			$("#bookName").val('');
-			initTable('/listTradeOrder.action');
+			initTable('/listTradeOrder.action?shopId=${sessionScope.shop.id}');
 		});
 		
 		$('#editTradeOrder').click(function(){
@@ -149,9 +167,9 @@
 			});
 		});
 		
-		$("#myModal").on("hidden.bs.modal", function() {
+		$("#myModal,#emailModal").on("hidden.bs.modal", function() {
 		    $(this).removeData("bs.modal");
-		    initTable('/listTradeOrder.action'); // 重新加载数据
+		    initTable('/listTradeOrder.action?shopId=${sessionScope.shop.id}'); // 重新加载数据
 		});
 
 		function initTable(url) {
@@ -167,6 +185,15 @@
 			          field: 'id',
 			          align: 'center',
 			          valign: 'middle',
+			        }, {
+			          title: '客户姓名',
+			          field: 'userName',
+			          align: 'center',
+			          width: 200,
+			          valign: 'middle',
+			          formatter: function (value, row, index) {
+		        		  return value+'&nbsp;&nbsp;<div data-toggle="modal" data-target="#emailModal" onclick="sendEmail(\''+row.userId+'\')" class="btn btn-info">发送邮件</div>';
+		              }
 			        }, {
 			          title: '书名',
 			          field: 'bookName',
@@ -228,6 +255,35 @@
 		        ]]
 		    });
 		  }
+		
+		function sendEmail(toWho){
+			$("#emailIframe").attr("src","/toSendEmail.action?"+
+					"sender=${sessionScope.user.email}&receiveId="+toWho+
+					"&receiveName=${requestScope.shopData.userName}"+
+					"&userId=${sessionScope.user.id}&userName=${sessionScope.user.userName}");
+			$('#emailModal').on('shown.bs.modal', function () {
+				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
+				$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
+				$(this).find('.modal-title').text('发送邮件');// 修改modal的标题
+			});
+		}
+		
+		$(".sendNow").click(function(){
+			$.ajax({
+				type: 'post',
+				dataType: 'json',
+				url: '/sendEmail.action',
+				data: $("#emailIframe").contents().find("#myForm").serialize(),
+				async: false,
+				success: function(s){
+					$('#emailModal').modal('hide');
+					alert("邮件发送成功！");
+				},
+				error: function(e){
+					alert("邮件发送失败！");
+				}
+			});
+		});
 		
 	</script>
 </html>

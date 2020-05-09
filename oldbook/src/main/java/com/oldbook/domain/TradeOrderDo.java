@@ -34,6 +34,12 @@ public class TradeOrderDo implements Serializable {
 	private Integer cartId;
 	
 	/**
+	 * 店铺ID
+	 */
+	@Column(name = "SHOPID")
+	private Integer shopId;
+	
+	/**
 	 * 姓名ID
 	 */
 	@Column(name = "USERID")
@@ -201,6 +207,14 @@ public class TradeOrderDo implements Serializable {
 
 	public void setBookName(String bookName) {
 		this.bookName = bookName;
+	}
+
+	public Integer getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Integer shopId) {
+		this.shopId = shopId;
 	}
 	
 }

@@ -30,15 +30,12 @@
 			.modal{
 				margin: 5% auto;
 			}
-			#toolbar{
-				float: left;
-			}
 			.searchItem{
-				float: right;
+				float: left;
 				padding-right: 20px;
 				height: 35px;
    				line-height: 35px;
-			    margin-top: 5px;
+			    margin-bottom: 15px;
 			}
 			.searchItem span,input{
 				display: inline-block;
@@ -52,16 +49,9 @@
 		</style>
 	</head>
 	<body>
-	
-		<div id="toolbar">
-			<div id="addShop" class="btn btn-primary" data-toggle="modal" data-target="#myModal">新增用户</div>
-			<div id="editShop" class="btn btn-success" data-toggle="modal" data-target="#myModal">编辑用户</div>
-			<div id="deleteShop" class="btn btn-danger">删除用户</div>
-			
-		</div>
 		<div class="searchItem">
-			<span>姓名</span>
-		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="ShopName" value="" placeholder="请输入姓名">
+			<span>店铺名称</span>
+		    <input type="text" class="form-control" style="width: 160px;margin-top:5px;"  id="shopName" value="" placeholder="请输入店铺名称">
 			<div id="searchShop" class="btn btn-info">立即搜索</div>
 			<div id="clearSearch" class="btn btn-secondary">清空</div>
 		</div>
@@ -108,11 +98,11 @@
 		});
 		
 		$('#searchShop').click(function(){ // 立即搜索
-			var ShopName = $("#ShopName").val();
-			initTable('/listShop.action?ShopName='+ShopName);
+			var shopName = $("#shopName").val();
+			initTable('/listShop.action?shopName='+shopName);
 		});
 		$('#clearSearch').click(function(){
-			$("#ShopName").val('');
+			$("#shopName").val('');
 			initTable('/listShop.action');
 		});
 		$('#addShop').click(function(){
@@ -120,7 +110,7 @@
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('新增用户');// 修改modal的标题
+				$(this).find('.modal-title').text('新增店铺');// 修改modal的标题
 			});
 		});
 		$('#deleteShop').click(function(){
@@ -163,7 +153,7 @@
 			$('#myModal').on('shown.bs.modal', function () {
 				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的标题
-				$(this).find('.modal-title').text('编辑用户');// 修改modal的标题
+				$(this).find('.modal-title').text('编辑店铺');// 修改modal的标题
 			});
 		});
 		
@@ -202,55 +192,47 @@
 			          valign: 'middle',
 			          visible: false,
 			        }, {
-			          title: '姓名',
-			          field: 'ShopName',
+			          title: '店主姓名',
+			          field: 'userName',
 			          align: 'center'
 			        },{
-			          title: '角色ID',
-			          field: 'roleId',
+			          title: '店铺名称',
+			          field: 'shopName',
 			          align: 'center',
-			          visible: false,
 			        },{
-			          title: '角色',
-			          field: 'roleType',
+			          title: '默认邮费',
+			          field: 'postage',
 			          align: 'center',
 			        }, {
-			          title: '性别',
-			          field: 'gender',
+			          title: '开店时间',
+			          field: 'applyTime',
 			          align: 'center',
-			          formatter: function (value, row, index) {//  用户性别 0：男  1：女
-			                if (value == '0') {
-			                	value = "男";
-			                } else if (value == '1') {
-			                	value = "女";
-			                }
-			          	return value;
+			          formatter: function (value, row, index) {
+			        	  if(value){
+			        		  return value.replace('T', ' ');
+			        	  }
 		              }
 			        },{
-			          title: '用户名',
-			          field: 'account',
-			          align: 'center'
-			        },{
-			          title: '密码',
-			          field: 'password',
-			          align: 'center',
-			          visible: false,
-			        },{
 			          title: '联系方式',
-			          field: 'phoneNum',
+			          field: 'contactNum',
 			          align: 'center'
 			        },{
-			          title: '邮箱地址',
-			          field: 'email',
-			          align: 'center'
-			        },{
-			          title: '收货地址',
+			          title: '店铺地址',
 			          field: 'address',
+			          align: 'center',
+			        },{
+			          title: '店铺公告',
+			          field: 'notice',
 			          align: 'center'
 			        },{
-			          title: '余额',
-			          field: 'balance',
-			          align: 'center'
+			          title: '修改时间',
+			          field: 'updateTime',
+			          align: 'center',
+			          formatter: function (value, row, index) {
+			        	  if(value){
+			        		  return value.replace('T', ' ');
+			        	  }
+		              }
 			        }
 		        ]]
 		    });

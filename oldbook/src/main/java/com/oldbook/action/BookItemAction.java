@@ -118,6 +118,9 @@ public class BookItemAction implements Action, ModelDriven<BookItemDo> {
 			return ERROR;
 		}
 	}
+	public String toBookList() {
+		return SUCCESS;
+	}
 	
 	public String toViewBookItemPage() {
 		try {

@@ -140,6 +140,7 @@ public class BookCartAction implements Action, ModelDriven<BookCartDo> {
 					}
 					tradeOrderDo.setCartId(this.bookCartData.getId());
 					tradeOrderDo.setCreateTime(new Date());
+					tradeOrderDo.setShopId(this.bookCartData.getShopId());
 					tradeOrderService.insertTradeOrder(tradeOrderDo);
 				}
 				return NONE;

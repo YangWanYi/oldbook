@@ -46,6 +46,9 @@ public class TradeOrderDaoImpl extends HibernateDaoSupport  implements TradeOrde
 		if(StringUtils.isNoneEmpty(tradeOrder.getBookName())) {
 			hql.append(" and bookName like '%"+tradeOrder.getBookName()+"%'  ");
 		}
+		if(tradeOrder.getShopId()!=null) {
+			hql.append(" and shopId = "+tradeOrder.getShopId());
+		}
 		@SuppressWarnings("unchecked")
 		List<TradeOrderDo> list= (List<TradeOrderDo>) super.getHibernateTemplate().find(hql.toString());
 		return list;

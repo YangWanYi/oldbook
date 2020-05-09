@@ -110,13 +110,14 @@
 				display: none;
 			}
 			#shopInfo{
-				width: 11%;
+				width: 15%;
 				min-height:450px; 
 				margin-left: 5px;
 				padding: 10px;
 				border: 1px solid #80808087;
 				border-radius: 5px;
 				float: left;
+				margin-right: 20px;
 			}
 			.shopMsg{
 				line-height: 35px;
@@ -143,12 +144,12 @@
 				height: 100%;
 			}
 			.bookMsg{
+			    height: 200px;
 			}
 			.bookName{
 				font-size: 18px;
 				font-weight: bold;
 			    line-height: 40px;
-				border-bottom: 1px solid #80808087;
 			}
 			.bookDetail{
 			    width: 300px;
@@ -157,7 +158,6 @@
 			}
 			.introTitle{
 			    font-size: 18px;
-			    border-bottom: 1px solid red;
 			    margin: 10px 0px;
 			}
 			.introInfo{
@@ -201,88 +201,47 @@
 		</style>
 	</head>
 	<body>
-		<div class="content">
-			<div class="row top">
-			    <div class="col-4 logoPos">
-			    	<span class="webName">旧书交易网</span>
-			    </div>
-			    <div class="col-4 searchBar">
-		    		<div id="searchItem">
-		    			<ol>
-			    			<li class="active" id="book">商品</li>
-			    			<li id="shop">店铺</li>
-			    		</ol>
-		    		</div>
-			    	<div>
-			    		<input type="text" class="form-control" id="keyWords" placeholder="请输入关键字">
-			    		<span id="searchNow">搜索</span>
-			    	</div>
-			    </div>
-			    <div class="col-2">
-					<span class="topRightBtn applyShop" data-toggle="modal" data-target="#shopModal">申请开店</span>
-					<span class="topRightBtn logined myShop">我的店铺</span>
-					<span class="topRightBtn logined myCart">购物车</span>
-					<span class="topRightBtn logined myOrder">我的订单</span>
-			    </div>
-			   <div class="col-2">
-			   		<span class="topRight">
-		   				<span class="logined">
-							<span class="topRightBtn personalMsg" data-toggle="modal" data-target="#myModal">${sessionScope.user.account}</span>|<span class="logout topRightBtn">退出</span>
-			   			</span>
-		   				<span class="noLogin">
-			   				<span class="login topRightBtn" data-toggle="modal" data-target="#myModal">登录</span>|<span class="regist topRightBtn" data-toggle="modal" data-target="#myModal">注册</span>
-			   			</span>
-		   			</span>
-			    </div>
-			  </div>
-			<div class="row centerPos">
-				<div id="shopInfo">
-					<div class="shopMsg shopName">${requestScope.shopData.shopName}</div>
-					<div class="shopMsg">店主：${requestScope.shopData.userName}</div>
-					<div class="shopMsg">联系方式：${requestScope.shopData.contactNum}</div>
-					<div class="shopMsg">线下地址：${requestScope.shopData.address}</div>
-					<div class="shopMsg">店铺公告：${requestScope.shopData.notice}</div>
-				</div>
-				<div id="bookInfo">
-					<div class="bookCover">
-						<img src="ui/imgs/upload/${requestScope.bookItemData.cover}">
-					</div>
-					<div class="bookMsg">
-						<div class="bookName">${requestScope.bookItemData.bookName}</div>
-						<div class="bookDetail">类型：${requestScope.bookItemData.parentBookTypeName}>${requestScope.bookItemData.bookTypeName}</div>
-						<br/>
-						<div class="bookDetail">作者：${requestScope.bookItemData.author}</div>
-						<div class="bookDetail">纸张：${requestScope.bookItemData.paper}</div>
-						<div class="bookDetail">尺寸：${requestScope.bookItemData.bookSize}</div>
-						<br/>
-						<div class="bookDetail">出版人：${requestScope.bookItemData.publisher}</div>
-						<div class="bookDetail">装帧：${requestScope.bookItemData.graphic}</div>
-						<div class="bookDetail">ISBN：${requestScope.bookItemData.isbn}</div>
-						<br/>
-						<div class="bookDetail">版次：${requestScope.bookItemData.edition}</div>
-						<div class="bookDetail">页数：${requestScope.bookItemData.pagination}</div>
-						<div class="bookDetail">字数：${requestScope.bookItemData.wordCount}</div>
-						<br/>
-						<div class="introTitle">简介</div>
-						<div class="introInfo">${requestScope.bookItemData.introduce}</div>
-					</div>
-					<div style="clear: left;font-size: 16px;padding-top: 5px;">
-						<div style="float: left;margin-right: 30px;">售价：<span style="color:red;">￥${requestScope.bookItemData.salePrice}</span></div>
-						<div>库存：${requestScope.bookItemData.amount}（本）</div>
-						<div style="margin-top: 10px;" id="addCart" class="btn btn-danger">加入购物车</div>
-					</div>
-				</div>
-				<div class="otherBookTitle">当前店铺的其他书籍</div>
-				<div class="otherBook"></div>
+		<div id="shopInfo">
+			<div class="shopMsg shopName">${requestScope.shopData.shopName}</div>
+			<div class="shopMsg">店主：${requestScope.shopData.userName}</div>
+			<div class="shopMsg">联系方式：${requestScope.shopData.contactNum}</div>
+			<div class="shopMsg">线下地址：${requestScope.shopData.address}</div>
+			<div class="shopMsg">店铺公告：${requestScope.shopData.notice}</div>
+			<div class="shopMsg btn btn-danger sendEmailToMe" data-toggle="modal" data-target="#emailModal">发邮件给店主</div>
+		</div>
+		<div id="bookInfo">
+			<div class="bookCover">
+				<img src="ui/imgs/upload/${requestScope.bookItemData.cover}">
 			</div>
-			<div class="row bottom">
-			    <div class="col-12">
-			     	<span id="intro">网罗天下图书&nbsp;传承中华文明</span>
-			    </div>
+			<div class="bookMsg">
+				<div class="bookName">${requestScope.bookItemData.bookName}</div>
+				<div class="bookDetail">类型：${requestScope.bookItemData.parentBookTypeName}>${requestScope.bookItemData.bookTypeName}</div>
+				<br/>
+				<div class="bookDetail">作者：${requestScope.bookItemData.author}</div>
+				<div class="bookDetail">纸张：${requestScope.bookItemData.paper}</div>
+				<div class="bookDetail">尺寸：${requestScope.bookItemData.bookSize}</div>
+				<br/>
+				<div class="bookDetail">出版人：${requestScope.bookItemData.publisher}</div>
+				<div class="bookDetail">装帧：${requestScope.bookItemData.graphic}</div>
+				<div class="bookDetail">ISBN：${requestScope.bookItemData.isbn}</div>
+				<br/>
+				<div class="bookDetail">版次：${requestScope.bookItemData.edition}</div>
+				<div class="bookDetail">页数：${requestScope.bookItemData.pagination}</div>
+				<div class="bookDetail">字数：${requestScope.bookItemData.wordCount}</div>
+				<br/>
+			</div>
+			<div class="introTitle">简介</div>
+			<div class="introInfo"></div>
+			<div style="clear: left;font-size: 16px;padding-top: 5px;padding-left: 15%;">
+				<div style="float: left;margin-right: 30px;">售价：<span style="color:red;">￥${requestScope.bookItemData.salePrice}</span></div>
+				<div style="float: left;">库存：${requestScope.bookItemData.amount}（本）</div>
+				<div style="margin-left: 10px;" id="addCart" class="btn btn-danger">加入购物车</div>
 			</div>
 		</div>
-		<!-- 模态框（Modal） 个人中心  -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="otherBookTitle">当前店铺的其他书籍</div>
+		<div class="otherBook"></div>
+		<!-- 模态框（Modal） 发送邮件  -->
+		<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		    <div class="modal-dialog">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -290,8 +249,12 @@
 		                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		            </div>
 		            <div class="modal-body">
-						<iframe id="winIframe" width="100%" height="100%"></iframe>
+						<iframe id="emailIframe" width="100%" height="100%"></iframe>
 					</div>
+					<div class="modal-footer">
+		                <div class="btn btn-default" data-dismiss="modal">关闭</div>
+		                <div class="btn sendNow btn-primary">确定</div>
+		            </div>
 		        </div>
 		    </div>
 		</div>
@@ -301,56 +264,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		var userId = "${sessionScope.user.id}";
-		var roleTypeX = "${sessionScope.user.roleTypeX}";
-		var basePath = "<%=basePath%>";
 		$(function(){
-			if(roleTypeX!=null&&roleTypeX.indexOf('商家')!=-1){
-				$(".logined").show();
-			}
-			if(userId!=null&&userId!=''){
-				$(".noLogin").hide();
-				$(".logined").show();
-			}else{
-				if(roleTypeX!=null&&roleTypeX.indexOf('客户')!=-1){
-					$(".applyShop").show();
-				}
-			}
 			showOtherBook();
-		});
-		
-		$(".myShop").click(function(){ // 我的店铺
-			window.open('../merchant/index.jsp');
-		});
-		
-		$(".myCart").click(function(){ // 购物车
-			window.open('/toCustomerBookCartPage.action');
-		});
-		
-		$(".myOrder").click(function(){ // 我的订单
-			window.open('/toCustomerTradeOrderPage.action');
-		});
-		
-		// 加入购物车
-		$("#addCart").click(function(){
-			if(userId==null||userId==''){
-				alert("请先登录！");
-				return false;
+			var introduce = "${requestScope.bookItemData.introduce}";
+			if(introduce.length>200){
+				introduce = introduce.substring(0,200)+"...";
 			}
-			if(confirm('确定加入购物车吗？')){
-				$.ajax({
-					type: 'post',
-					dataType: 'json',
-					url: '/saveOrUpdateBookCart.action',
-					data: {'bookId': '${requestScope.bookItemData.id}'},
-					async: false,
-					success: function(s){
-						alert('成功加入购物车！');
-					},
-					error: function(e){
-						alert("加入购物车失败！");
-					}
-				});
-			}
+			$(".introInfo").html(introduce);
 		});
 		
 		function showOtherBook(){
@@ -389,92 +309,80 @@
 			});
 		}
 		
+		// 加入购物车
+		$("#addCart").click(function(){
+			if(userId==null||userId==''){
+				alert("请先登录！");
+				return false;
+			}
+			if(confirm('确定加入购物车吗？')){
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					url: '/saveOrUpdateBookCart.action',
+					data: {'bookId': '${requestScope.bookItemData.id}'},
+					async: false,
+					success: function(s){
+						alert('成功加入购物车！');
+					},
+					error: function(e){
+						alert("加入购物车失败！");
+					}
+				});
+			}
+		});
+		
 		function showDetail(bookId){
-			window.open('/toViewBookItemPage.action?id='+bookId);
+			top.$("#centerFrame").attr('src','/toViewBookItemPage.action?id='+bookId);
 		}
-		
-		var searchType = 'book';
-		$("#book").click(function(){ // 搜索商品
-			$("*").removeClass("active");
-			$(this).addClass("active");
-			searchType = 'book';
+
+		$("#emailModal").on("hidden.bs.modal", function() {
+		    $(this).removeData("bs.modal");
 		});
 		
-		$("#shop").click(function(){ // 搜索店铺
-			$("*").removeClass("active");
-			$(this).addClass("active");
-			searchType = 'shop';
-		});
-		
-		$("#searchNow").click(function(){ // 立即搜索
-			var keyWords = $("#keyWords").val();
-			window.open(''); // 打开新的窗口显示搜索结果
-		});
-		
-		$(".saveNow").click(function(){
+		$(".sendNow").click(function(){
 			$.ajax({
 				type: 'post',
 				dataType: 'json',
-				url: '/saveOrUpdateUser.action',
-				data: $("#winIframe").contents().find("#myForm").serialize(),
+				url: '/sendEmail.action',
+				data: $("#emailIframe").contents().find("#myForm").serialize(),
 				async: false,
 				success: function(s){
-					$('#myModal').modal('hide');
-					alert("修改成功！");
+					$('#emailModal').modal('hide');
+					alert("邮件发送成功！");
 				},
 				error: function(e){
-					alert("修改失败！");
+					alert("邮件发送失败！");
 				}
 			});
 		});
 
-		$(".personalMsg").click(function(){ // 去个人中心
-			if(userId!=null&&userId!=''){
-				$("#winIframe").attr("src","/toUpdateUserPage.action?id="+userId);
-				$('#myModal').on('shown.bs.modal', function () {
-					$(this).find('.modal-content').css('height','600px');// 修改modal的高度
-					$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
-					$(this).find('.modal-title').text('修改个人信息');// 修改modal的标题
-				});
+		$(".sendEmailToMe").click(function(){ // 去发送邮件
+			// 当前用户邮箱地址和邮箱授权码不为空才可以发送邮件
+			var email = "${sessionScope.user.email}";
+			var emailCode = "${sessionScope.user.emailCode}";
+			if(userId==null||userId==''){
+				alert('请先登录！');
+				return false;
 			}
-		});
-
-		$("#myModal").on("hidden.bs.modal", function() {
-		    $(this).removeData("bs.modal");
-		});
-		
-
-		$(".regist").click(function(){ // 去注册
-			$("#winIframe").attr('src','ui/common/regist.jsp');
-			$('#myModal').on('shown.bs.modal', function () {
-				$(this).find('.modal-content').css('height','280px');// 修改modal的高度
+			if(email==null||email==''){
+				alert('请补充您的邮箱地址！');
+				return false;
+			}
+			if(emailCode==null||emailCode==''){
+				alert('请补充您的邮箱授权码！');
+				return false;
+			}
+			$("#emailIframe").attr("src","/toSendEmail.action?"+
+					"sender=${sessionScope.user.email}&receiveId=${requestScope.shopData.userId}"+
+					"&receiveName=${requestScope.shopData.userName}"+
+					"&userId=${sessionScope.user.id}&userName=${sessionScope.user.userName}");
+			$('#emailModal').on('shown.bs.modal', function () {
+				$(this).find('.modal-content').css('height','600px');// 修改modal的高度
 				$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
+				$(this).find('.modal-title').text('发送邮件');// 修改modal的标题
 			});
 		});
-		
-		$(".login").click(function(){ // 去登录
-			$("#winIframe").attr('src','ui/common/login.jsp');
-			$('#myModal').on('shown.bs.modal', function () {
-				$(this).find('.modal-content').css('height','280px');// 修改modal的高度
-				$(this).find('.modal-content').css('width','500px');// 修改modal的宽度
-			});
-		});
-		
-		$(".logout").click(function(){ // 退出
-			if(confirm('确定要退出吗？')){
-				$.ajax({
-					type: 'post',
-					dataType: 'json',
-					url: '/logout.action',
-					async: false,
-					success: function(s){
-						location.href= basePath; //刷新父级页面
-					},
-					error: function(e){
-						alert("退出失败！");
-					}
-				});
-		    }
-		});
+
 	</script>
 </html>

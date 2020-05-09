@@ -162,7 +162,7 @@
 		}
 		
 		function showDetail(bookId){
-			window.open('/toViewBookItemPage.action?id='+bookId);
+			top.$("#centerFrame").attr('src','/toViewBookItemPage.action?id='+bookId);
 		}
 	</script>
 </html>
