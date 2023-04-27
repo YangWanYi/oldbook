@@ -21,7 +21,7 @@ public class AppTest
     }
 
     /**
-     * @return the suite of tests being tested
+     * @return the suite of tests being tested你额有额有任何
      */
     public static Test suite()
     {
