@@ -3,7 +3,7 @@ package com.oldbook.utils;
 public class CommonConstants {
 
 	/*
-	 * 性别
+	 * 性别gadfgsd萨达
 	 */
 	public static enum GenderType {
 		MALE("男"), FEMALE("女");
